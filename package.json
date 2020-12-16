@@ -1,0 +1,73 @@
+{
+  "name": "glass-radar-server",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "jihad khorfan",
+    "email": "spyshow86@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^12.18.3",
+    "yarn": ">= 0.18.0"
+  },
+  "scripts": {
+    "test": "yarn run lint && yarn run jest",
+    "lint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "jest": "jest  --forceExit"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "ignore": []
+  },
+  "dependencies": {
+    "@ant-design/colors": "^5.0.0",
+    "@feathersjs/authentication": "^4.5.1",
+    "@feathersjs/authentication-local": "^4.5.1",
+    "@feathersjs/authentication-oauth": "^4.5.1",
+    "@feathersjs/cli": "^4.4.2",
+    "@feathersjs/configuration": "^4.5.1",
+    "@feathersjs/errors": "^4.5.1",
+    "@feathersjs/express": "^4.5.1",
+    "@feathersjs/feathers": "^4.5.1",
+    "@feathersjs/socketio": "^4.5.1",
+    "@feathersjs/transport-commons": "^4.5.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "cron-job-manager": "^2.1.2",
+    "dotenv": "^8.2.0",
+    "feathers-profiler": "^0.1.5",
+    "feathers-sequelize": "^6.1.0",
+    "feathers-swagger": "^1.2.1",
+    "helmet": "^3.21.2",
+    "multer": "^1.4.2",
+    "pg": "^8.0.3",
+    "sequelize": "^5.21.4",
+    "serve-favicon": "^2.5.0",
+    "soap": "^0.31.0",
+    "winston": "^3.0.0",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "eslint": "^6.8.0",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.2"
+  }
+}
