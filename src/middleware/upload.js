@@ -1,5 +1,5 @@
-module.exports = function (app) {
-  const upload = async (req, res, next) => {
+module.exports = function () {
+  const upload = async (req, res) => {
     const { user } = req;
     console.log(user);
     try {

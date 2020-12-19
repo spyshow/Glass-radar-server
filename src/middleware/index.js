@@ -1,17 +1,12 @@
 /* eslint-disable linebreak-style */
 const upload = require("./upload");
 // eslint-disable-next-line no-unused-vars
-//const authenticate = require("@feathersjs/authentication");
 const { authenticate } = require("@feathersjs/express"); //
 const multer = require("multer");
 
-/********************/
-/* TODO: make authintication */
-/********************/
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/uploads"),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
+  filename: (req, file, cb) => cb(null, `${file.originalname}`), //`${Date.now()}-${file.originalname}`
 });
 const uploaded = multer({
   storage,
@@ -22,6 +17,7 @@ const uploaded = multer({
     // READ MORE https://www.npmjs.com/package/multer#limits
   },
 });
+
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.post(
