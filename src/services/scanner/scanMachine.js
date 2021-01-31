@@ -1,5 +1,13 @@
+/* eslint-disable indent */
 /* eslint-disable linebreak-style */
-
+const sensorIds = {
+  16: "LNM",
+  40: "Plug",
+  41: "Leak",
+  42: "Check",
+  46: "Thickness",
+  121: "unknow",
+};
 /* eslint-disable quotes */
 const soap = require("soap");
 const parseString = require("xml2js").parseString;
@@ -14,7 +22,6 @@ let s2n = (string) => {
 
 const scanMachine = (machine, line_number, app) => {
   const mahcnieData = app.service("machine-data");
-
   //each machine
   let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
   //example: MCAL_M22
@@ -36,17 +43,27 @@ const scanMachine = (machine, line_number, app) => {
               //if the first call for the API it will return an empty respond
               setTimeout(scanMachine, 60000, machine, line_number, app); // call the function again after 60 second
             } else {
+              console.log(machine.type);
               //calling soap api
               client.Counts({}, function (err, xml) {
-                parseString(xml.CountsResult, function (err, result) {
-                  if (result == null) {
+                if (machine.type === "MX4") {
+                  if (xml == null) {
+                    console.log("waiting result ... ");
                     // if the respond is empty
                     setTimeout(scanMachine, 60000, machine, line_number, app); // try again in 60 second
                   } else {
+                    let result = xml.CountsResult.Root.Machine;
+                    console.log(result.attributes.Id);
                     let insertQuery;
                     let sensorArray = [];
                     //building the insert statement and array
-                    if (typeof result.Mold === Array) {
+                    if (
+                      Array.isArray(result.Mold) ||
+                      result.attributes.Id === "MX"
+                    ) {
+                      //TODO:
+                      //if no mold number reader is installed
+
                       //building Insert query
                       let insertQuery1 =
                         'INSERT INTO "' +
@@ -59,27 +76,66 @@ const scanMachine = (machine, line_number, app) => {
                       result.Mold.map((mold, moldIndex) => {
                         insertQuery2 += " (uuid_generate_v4(),";
                         for (var i = 0; i < 4; i++) {
+                          switch (i) {
+                            case 0:
+                              sensorArray[sensorIndex - 1] = machine.id;
+
+                              break;
+                            case 1:
+                              sensorArray[sensorIndex - 1] = s2n(
+                                mold.Inspected
+                              );
+
+                              break;
+                            case 2:
+                              sensorArray[sensorIndex - 1] = s2n(mold.Rejects);
+                              break;
+                            case 3:
+                              sensorArray[sensorIndex - 1] = s2n(
+                                mold.attributes.id
+                              );
+                              break;
+                            default:
+                              break;
+                          }
+
                           insertQuery2 += "$" + sensorIndex + ",";
                           sensorIndex++;
                         }
-                        machine.sensors.sensors.map((sensor, index) => {
+
+                        machine.sensors.sensors.map((sensor) => {
+                          let rejects;
                           //loop through all the sensors
-                          for (var i = 0; i < sensor.counter.length; i++) {
+
+                          //here is error
+                          for (var i = 1; i < sensor.counter.length + 1; i++) {
+                            for (var l = 0; l < mold.Sensor.length; l++) {
+                              if (
+                                sensor.counter[i - 1].id ===
+                                sensorIds[mold.Sensor[l].attributes.id]
+                              ) {
+                                rejects = mold.Sensor[l].Rejects;
+                                console.log(rejects, sensor.counter[i - 1].id);
+                              }
+                            }
                             //loop through the counters of the sensor
                             if (moldIndex == 0) {
                               //loop only at the first time ( to write the sensor_counter names )
                               insertQuery1 +=
-                                sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
+                                "MX4_" + sensor.counter[i - 1].id + ","; //add the name of the sensor_counter
                             }
                             insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
 
-                            sensorArray[sensorIndex - 5] = s2n(
+                            sensorArray[sensorIndex - 1] = s2n(
                               // insert value of counter to sensor array
-                              result.Mold.Machine[0].Sensor[index].Counter[i][
-                                "$"
-                              ].Nb
+                              rejects
                             );
-
+                            console.log(
+                              sensorIndex,
+                              rejects,
+                              sensorIndex - 1 * i,
+                              sensorArray[sensorIndex - 1]
+                            );
                             sensorIndex++; // increase the index by 1
                           }
                         });
@@ -88,6 +144,8 @@ const scanMachine = (machine, line_number, app) => {
                       });
                       insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
                       insertQuery = insertQuery1 + insertQuery2.slice(0, -1);
+                      console.table(sensorArray);
+                      console.log(insertQuery);
                     } else {
                       //building Insert query
                       console.log("its an object");
@@ -127,21 +185,13 @@ const scanMachine = (machine, line_number, app) => {
                       insertQuery = insertQuery1 + insertQuery2;
                       //DONE BUILDING INSERT QUERY
 
-                      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                      //!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!
                     }
                     //START GATHERING THE INSERT VALUES
-                    let values = [
-                      machine.id,
-                      s2n(result.Mold.Machine[0].Inspected),
-                      s2n(result.Mold.Machine[0].Rejects),
-                      s2n(result.Mold.$.id),
-                      ...sensorArray,
-                    ];
                     //DONE GATHERING THE INSERT VALUES
                     //INSERT VALUES TO DB
-                    console.log(values);
                     pool
-                      .query(insertQuery, values)
+                      .query(insertQuery, sensorArray)
                       .then((res) => {
                         console.log(res.rows);
                         mahcnieData.emit("created", {
@@ -152,7 +202,127 @@ const scanMachine = (machine, line_number, app) => {
                       .catch((error) => console.log("!!" + error));
                     //DONE INSERTING VALUES TO DB
                   }
-                });
+                }
+                // } else {
+                //   parseString(xml.CountsResult, function (err, result) {
+                //     if (result == null) {
+                //       console.log("waiting result ... ");
+                //       // if the respond is empty
+                //       setTimeout(scanMachine, 60000, machine, line_number, app); // try again in 60 second
+                //     } else {
+                //       console.log(result);
+                //       let insertQuery;
+                //       let sensorArray = [];
+                //       //building the insert statement and array
+                //       if (typeof result.Mold === Array) {
+                //         //building Insert query
+                //         let insertQuery1 =
+                //           'INSERT INTO "' +
+                //           machine_and_line +
+                //           '" (id,machine_id, inspected, rejected, mold ,';
+                //         //start building the values string
+                //         let insertQuery2 = " VALUES ";
+                //         let sensorIndex = 1;
+
+                //         result.Mold.map((mold, moldIndex) => {
+                //           insertQuery2 += " (uuid_generate_v4(),";
+                //           for (var i = 0; i < 4; i++) {
+                //             insertQuery2 += "$" + sensorIndex + ",";
+                //             sensorIndex++;
+                //           }
+                //           machine.sensors.sensors.map((sensor, index) => {
+                //             //loop through all the sensors
+                //             for (var i = 0; i < sensor.counter.length; i++) {
+                //               //loop through the counters of the sensor
+                //               if (moldIndex == 0) {
+                //                 //loop only at the first time ( to write the sensor_counter names )
+                //                 insertQuery1 +=
+                //                   sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
+                //               }
+                //               insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
+
+                //               sensorArray[sensorIndex - 5] = s2n(
+                //                 // insert value of counter to sensor array
+                //                 result.Mold.Machine[0].Sensor[index].Counter[i][
+                //                   "$"
+                //                 ].Nb
+                //               );
+
+                //               sensorIndex++; // increase the index by 1
+                //             }
+                //           });
+
+                //           insertQuery2 += " NOW(), NOW()),";
+                //         });
+                //         insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
+                //         insertQuery = insertQuery1 + insertQuery2.slice(0, -1);
+                //       } else {
+                //         //building Insert query
+                //         console.log("its an object");
+                //         let insertQuery1 =
+                //           'INSERT INTO "' +
+                //           // result.Mold.Machine[0].$.id +
+                //           // "_" +
+                //           // machine.machine_line.replace(/[^A-Z0-9]/gi, "") +
+                //           machine_and_line +
+                //           '" (id,machine_id, inspected, rejected, mold ,';
+
+                //         //start building the values string
+                //         let insertQuery2 =
+                //           " VALUES (uuid_generate_v4(),$1,$2,$3, $4, ";
+                //         let sensorIndex = 5; // sensor array offset
+
+                //         machine.sensors.sensors.map((sensor, index) => {
+                //           //loop through all the sensors
+                //           for (var i = 0; i < sensor.counter.length; i++) {
+                //             //loop through the counters of the sensor
+                //             insertQuery1 +=
+                //               sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
+
+                //             insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
+
+                //             sensorArray[sensorIndex - 5] = s2n(
+                //               // insert value of counter to sensor array
+                //               result.Mold.Machine[0].Sensor[index].Counter[i][
+                //                 "$"
+                //               ].Nb
+                //             );
+
+                //             sensorIndex++; // increase the index by 1
+                //           }
+                //         });
+                //         insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
+                //         insertQuery2 += " NOW(), NOW()) RETURNING *;";
+                //         insertQuery = insertQuery1 + insertQuery2;
+                //         //DONE BUILDING INSERT QUERY
+
+                //         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //       }
+                //       //START GATHERING THE INSERT VALUES
+                //       let values = [
+                //         machine.id,
+                //         s2n(result.Mold.Machine[0].Inspected),
+                //         s2n(result.Mold.Machine[0].Rejects),
+                //         s2n(result.Mold.$.id),
+                //         ...sensorArray,
+                //       ];
+                //       //DONE GATHERING THE INSERT VALUES
+                //       //INSERT VALUES TO DB
+                //       console.log(values);
+                //       pool
+                //         .query(insertQuery, values)
+                //         .then((res) => {
+                //           console.log(res.rows);
+                //           mahcnieData.emit("created", {
+                //             type: "created",
+                //             data: res.rows[0],
+                //           });
+                //         })
+                //         .catch((error) => console.log("!!" + error));
+                //       //DONE INSERTING VALUES TO DB
+                //     }
+                //   });
+                // }
               });
             }
           }

@@ -2,6 +2,8 @@
 const soap = require("soap");
 const parseString = require("xml2js").parseString;
 const pool = require("./../../db");
+const { mx4Init } = require("./mx4Init");
+const { mm4Init } = require("./mm4Init");
 // const feathers = require("@feathersjs/feathers");
 // const lines = app.service("lines");
 
@@ -54,8 +56,8 @@ exports.MachineInit = class MachineInit {
     console.log(lineData.line_number);
     let machine_and_line =
       data.machine_name + "_" + lineData.line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
+
     function learnSensors(url, machine_name, id) {
-      const sensorObj = { sensors: [] };
       let insertQuery =
         'CREATE TABLE IF NOT EXISTS "' +
         machine_name +
@@ -67,65 +69,31 @@ exports.MachineInit = class MachineInit {
         function (err, client) {
           if (typeof client === "undefined") {
             console.log("waiting Client ... ");
-            setTimeout(learnSensors, 60000);
+            setTimeout(learnSensors, 60000, url, machine_name, id);
           } else {
+            console.log("S", data.type);
             //calling soap api
+
             client.Counts({}, function (err, xml) {
-              parseString(xml.CountsResult, function (err, result) {
-                if (result == null) {
+              //check if machine type is Mcal, Multi or MX4
+              if (data.type === "MX4") {
+                if (xml.CountsResult === null) {
                   console.log("waiting result ... ");
-                  setTimeout(learnSensors, 60000);
+                  setTimeout(learnSensors, 60000, url, machine_name, id);
                 } else {
-                  console.log("result" + JSON.stringify(result, null, 4));
-
-                  let machine = result.Mold.Machine[0];
-
-                  machine.Sensor.map((sensor, index) => {
-                    let counters = [];
-                    let sensorName = sensor.$.id;
-                    for (
-                      let i = 0;
-                      i < Object.keys(sensor.Counter).length;
-                      i++
-                    ) {
-                      let counterId = sensor.Counter[i]["$"].id.replace(
-                        /[^A-Z0-9]/gi,
-                        ""
-                      );
-                      insertQuery += sensorName + "_" + counterId + " integer,";
-
-                      counters.push({ id: counterId });
-                    }
-                    sensorObj.sensors.push({
-                      id: sensorName,
-                      counter: counters,
-                    });
-                  });
-                  insertQuery +=
-                    "created_at timestamp with time zone,updated_at timestamp with time zone, " +
-                    "CONSTRAINT " +
-                    machine_name +
-                    "_pkey PRIMARY KEY (id), " +
-                    "CONSTRAINT " +
-                    machine_name +
-                    "_machine_id_fkey FOREIGN KEY (machine_id) " +
-                    "REFERENCES public.machines (id) MATCH SIMPLE " +
-                    "ON UPDATE CASCADE " +
-                    "ON DELETE CASCADE);";
-                  const updateQuery = `UPDATE public.machines
-                    SET sensors=$1
-                    WHERE id=$2;`;
-                  //console.log(id, JSON.stringify(sensorObj, null, 4));
-                  const updateValues = [sensorObj, id];
-                  console.log(insertQuery);
-                  pool
-                    .query(insertQuery)
-                    .then(() => {
-                      pool.query(updateQuery, updateValues);
-                    })
-                    .catch((error) => console.log(error));
+                  mx4Init(xml, insertQuery, machine_name, id, pool);
                 }
-              });
+              } else {
+                parseString(xml.CountsResult, function (err, result) {
+                  console.log(result);
+                  if (result === null) {
+                    console.log("waiting result ... ");
+                    setTimeout(learnSensors, 60000, url, machine_name, id);
+                  } else {
+                    mm4Init(result, insertQuery, machine_name, id, pool);
+                  }
+                });
+              }
             });
           }
         }

@@ -26,13 +26,12 @@ exports.Scanner = class Scanner {
   // start scanning for a specific machines
   async get(id, params) {
     const lines = this.app.service("lines");
-    console.log(params);
     pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [id] })
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
-          console.log(line);
+          console.log(res);
           scanMachine(machine, line.line_number, this.app);
         });
         return "scanning";
@@ -41,14 +40,12 @@ exports.Scanner = class Scanner {
   }
   // in use right now
   async create(data, params) {
-    console.log(data.id);
     const lines = this.app.service("lines");
     await pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
-          console.log(line);
           scanMachine(machine, line.line_number, this.app);
         });
       })

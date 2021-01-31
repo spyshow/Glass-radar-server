@@ -1,0 +1,1054 @@
+{
+  "attributes": {
+    "id": "8"
+  },
+  "Inspected": "192",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+    {
+      "attributes": {
+        "id": "16"
+      },
+      "Rejects": "0",
+      "Defects": "0"
+    },
+    {
+      "attributes": {
+        "id": "121"
+      },
+      "Rejects": "0",
+      "Defects": "0"
+    },
+    {
+      "attributes": {
+        "id": "46"
+      },
+      "Rejects": "0",
+      "Defects": "0"
+    },
+    {
+      "attributes": {
+        "id": "40"
+      },
+      "Rejects": "0",
+      "Defects": "0"
+    },
+    {
+      "attributes": {
+        "id": "42"
+      },
+      "Rejects": "0",
+      "Defects": "0"
+    }
+  ]
+}
+{
+  "attributes": {
+  "id": "12"
+  },
+  "Inspected": "199",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "36"
+  },
+  "Inspected": "1",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "1"
+  },
+  "Inspected": "144",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "15"
+  },
+  "Inspected": "189",
+  "Rejects": "2",
+  "Defects": "2",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "2",
+  "Defects": "2",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "7",
+      "Nb": "2"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "2"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "84"
+  },
+  "Inspected": "1",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "23"
+  },
+  "Inspected": "198",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "26"
+  },
+  "Inspected": "192",
+  "Rejects": "1",
+  "Defects": "1",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "1",
+  "Defects": "1",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "7",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "1"
+  }
+  }
+  ]
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "4"
+  },
+  "Inspected": "169",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "18"
+  },
+  "Inspected": "189",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "20"
+  },
+  "Inspected": "194",
+  "Rejects": "5",
+  "Defects": "5",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "5",
+  "Defects": "5",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "6",
+      "Nb": "4"
+  }
+  },
+  {
+  "attributes": {
+      "id": "7",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "5"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "30"
+  },
+  "Inspected": "1",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "5"
+  },
+  "Inspected": "202",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "13"
+  },
+  "Inspected": "142",
+  "Rejects": "1",
+  "Defects": "1",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "1",
+  "Defects": "1",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "7",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "1"
+  }
+  }
+  ]
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "0"
+  },
+  "Inspected": "224",
+  "Rejects": "7",
+  "Defects": "7",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "1",
+  "Defects": "1",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "7",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "1"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "4",
+  "Defects": "4",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "1",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "3",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "9",
+      "Nb": "3"
+  }
+  },
+  {
+  "attributes": {
+      "id": "11",
+      "Nb": "3"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "4",
+  "Defects": "4",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "1",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "2",
+      "Nb": "3"
+  }
+  }
+  ]
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Inspected": "200",
+  "Rejects": "8",
+  "Defects": "8",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "7",
+  "Defects": "7",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "1",
+      "Nb": "6"
+  }
+  },
+  {
+  "attributes": {
+      "id": "3",
+      "Nb": "6"
+  }
+  },
+  {
+  "attributes": {
+      "id": "9",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "11",
+      "Nb": "1"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "7",
+  "Defects": "7",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "1",
+      "Nb": "6"
+  }
+  },
+  {
+  "attributes": {
+      "id": "2",
+      "Nb": "1"
+  }
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "1",
+  "Defects": "1",
+  "Counter": [
+  {
+  "attributes": {
+      "id": "4",
+      "Nb": "1"
+  }
+  },
+  {
+  "attributes": {
+      "id": "25",
+      "Nb": "1"
+  }
+  }
+  ]
+  }
+  ]
+  },
+  {
+  "attributes": {
+  "id": "24"
+  },
+  "Inspected": "150",
+  "Rejects": "0",
+  "Defects": "0",
+  "Autoreject": "0",
+  "Sensor": [
+  {
+  "attributes": {
+  "id": "40"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "121"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "46"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "16"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  },
+  {
+  "attributes": {
+  "id": "42"
+  },
+  "Rejects": "0",
+  "Defects": "0"
+  }
+  ]
+  }
+  
+
+  {
+    "attributes": {
+    "id": "16"
+    },
+    "Inspected": "200",
+    "Rejects": "8",
+    "Defects": "8",
+    "Autoreject": "0",
+    "Sensor": [
+    {
+    "attributes": {
+    "id": "16"
+    },
+    "Rejects": "0",
+    "Defects": "0"
+    },
+    {
+    "attributes": {
+    "id": "40"
+    },
+    "Rejects": "0",
+    "Defects": "0"
+    },
+    {
+    "attributes": {
+    "id": "121"
+    },
+    "Rejects": "7",
+    "Defects": "7",
+    "Counter": [
+    {
+    "attributes": {
+        "id": "1",
+        "Nb": "6"
+    }
+    },
+    {
+    "attributes": {
+        "id": "3",
+        "Nb": "6"
+    }
+    },
+    {
+    "attributes": {
+        "id": "9",
+        "Nb": "1"
+    }
+    },
+    {
+    "attributes": {
+        "id": "11",
+        "Nb": "1"
+    }
+    }
+    ]
+    },
+    {
+    "attributes": {
+    "id": "46"
+    },
+    "Rejects": "7",
+    "Defects": "7",
+    "Counter": [
+    {
+    "attributes": {
+        "id": "1",
+        "Nb": "6"
+    }
+    },
+    {
+    "attributes": {
+        "id": "2",
+        "Nb": "1"
+    }
+    }
+    ]
+    },
+    {
+    "attributes": {
+    "id": "42"
+    },
+    "Rejects": "1",
+    "Defects": "1",
+    "Counter": [
+    {
+    "attributes": {
+        "id": "4",
+        "Nb": "1"
+    }
+    },
+    {
+    "attributes": {
+        "id": "25",
+        "Nb": "1"
+    }
+    }
+    ]
+    }
+    ]
+    }

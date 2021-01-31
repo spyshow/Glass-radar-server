@@ -1,0 +1,803 @@
+{
+  "Root": {
+    "Machine": {
+      "attributes": {
+        "Id": "MX"
+      },
+      "Inspected": "69",
+      "Rejects": "3",
+      "Defects": "0",
+      "Autoreject": "3",
+      "Mold": [
+        {
+          "attributes": {
+            "id": "14"
+          },
+          "Inspected": "5",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "17"
+          },
+          "Inspected": "4",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "8"
+          },
+          "Inspected": "3",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "12"
+          },
+          "Inspected": "6",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "28"
+          },
+          "Inspected": "3",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "1"
+          },
+          "Inspected": "2",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "15"
+          },
+          "Inspected": "3",
+          "Rejects": "3",
+          "Defects": "0",
+          "Autoreject": "3",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "3",
+              "Defects": "3",
+              "Counter": {
+                "attributes": {
+                  "id": "1",
+                  "Nb": "3"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "23"
+          },
+          "Inspected": "2",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "26"
+          },
+          "Inspected": "3",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "18"
+          },
+          "Inspected": "5",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "4"
+          },
+          "Inspected": "4",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "20"
+          },
+          "Inspected": "9",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "5"
+          },
+          "Inspected": "4",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "13"
+          },
+          "Inspected": "4",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "0"
+          },
+          "Inspected": "5",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "16"
+          },
+          "Inspected": "4",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "id": "24"
+          },
+          "Inspected": "3",
+          "Rejects": "0",
+          "Defects": "0",
+          "Autoreject": "0",
+          "Sensor": [
+            {
+              "attributes": {
+                "id": "40"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "121"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "46"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "16"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            },
+            {
+              "attributes": {
+                "id": "42"
+              },
+              "Rejects": "0",
+              "Defects": "0"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
