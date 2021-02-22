@@ -12,7 +12,7 @@ const mx4Init = function (xml, insertQuery, machine_name, machine_id, pool) {
   let counters = [];
   const sensorObj = { sensors: [] };
   let machine = xml.CountsResult.Root.Machine.Mold[0];
-  console.log(JSON.stringify(xml.CountsResult, null, 4));
+  //console.log(JSON.stringify(xml.CountsResult, null, 4));
   machine.Sensor.map((sensor) => {
     insertQuery += "MX4_" + sensorIds[sensor.attributes.id] + " integer,";
     counters.push({ id: sensorIds[sensor.attributes.id] });
@@ -37,8 +37,8 @@ const mx4Init = function (xml, insertQuery, machine_name, machine_id, pool) {
                       WHERE id=$2;`;
   //console.log(id, JSON.stringify(sensorObj, null, 4));
   const updateValues = [sensorObj, machine_id];
-  console.log(insertQuery);
-  console.log(JSON.stringify(updateValues, null, 4));
+  // console.log(insertQuery);
+  // console.log(JSON.stringify(updateValues, null, 4));
   pool
     .query(insertQuery)
     .then(() => {
