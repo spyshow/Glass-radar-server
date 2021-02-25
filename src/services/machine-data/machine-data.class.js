@@ -5,15 +5,104 @@ const pool = require("./../../db");
 const { separateObject } = require("../../utils/separateObject");
 const { removeA } = require("../../utils/removeA");
 var moment = require("moment");
-const {
-  blue,
-  red,
-  yellow,
-  lime,
-  volcano,
-  cyan,
-  purple,
-} = require("@ant-design/colors");
+
+const colors = [
+  [
+    "#A8C545",
+    "#2d350a",
+    "#3a440c",
+    "#47530f",
+    "#5a6913",
+    "#677916",
+    "#7a8f1a",
+    "#879e1d",
+    "#9ab521",
+    "#a7c424",
+    "#b9d82a",
+    "#c2dd46",
+    "#c8e159",
+    "#cde366",
+    "#d7e986",
+    "#e2efa6",
+    "#e8f2b9",
+  ],
+  [
+    "#0067A6",
+    "#001f2f",
+    "#01273d",
+    "#01304a",
+    "#013d5e",
+    "#01466c",
+    "#015380",
+    "#015c8e",
+    "#0269a2",
+    "#0272af",
+    "#027fc4",
+    "#0294e4",
+    "#07a6fd",
+    "#1aadfd",
+    "#49befd",
+    "#79cffe",
+    "#96d9fe",
+  ],
+  [
+    "#C30F0E",
+    "#4c0000",
+    "#620000",
+    "#780000",
+    "#980000",
+    "#ae0000",
+    "#cf0000",
+    "#e40000",
+    "#ff0606",
+    "#ff1c1c",
+    "#ff3c3c",
+    "#ff5d5d",
+    "#ff6e6e",
+    "#ff7979",
+    "#ff9595",
+    "#ffb1b1",
+    "#ffc2c2",
+  ],
+  [
+    "#732DD9",
+    "#140b23",
+    "#1e1135",
+    "#251541",
+    "#2f1a53",
+    "#351e5e",
+    "#3f2470",
+    "#46277c",
+    "#502d8e",
+    "#563199",
+    "#6036ab",
+    "#6f40c2",
+    "#7e54c9",
+    "#8861cd",
+    "#a182d7",
+    "#b9a3e2",
+    "#c8b7e8",
+  ],
+  [
+    "#7A5700",
+    "#231900",
+    "#372700",
+    "#3f2d00",
+    "#4b3500",
+    "#533b00",
+    "#5e4300",
+    "#664900",
+    "#725100",
+    "#876000",
+    "#936900",
+    "#b98400",
+    "#d29500",
+    "#ffbb11",
+    "#ffcd50",
+    "#ffd875",
+    "#ffdf8e",
+  ],
+];
 const { round } = require("./../../utils/round");
 
 exports.MachineData = class MachineData {
@@ -26,10 +115,16 @@ exports.MachineData = class MachineData {
     let previousDate = "Previous time";
     let selectedDate = "selected date";
     let newResult = {};
-    let widthSensor = [];
+    let oldColors = [];
+    let newColors = [];
     let oldResult = {};
     let oldMachineData, newMachineData;
     let data = { xData: [], yData: [], y1Data: [] };
+    console.log(
+      params.query.newStartDate,
+      params.query.oldStartDate,
+      moment(params.query.newStartDate).from(params.query.oldStartDate)
+    );
     let option = {
       tooltip: {
         trigger: "axis",
@@ -172,27 +267,7 @@ exports.MachineData = class MachineData {
               color: "#555",
             },
           },
-          itemStyle: {
-            normal: {
-              color: (params) => {
-                let colors = [
-                  "#b6c2ff",
-                  "#96edc1",
-                  "#fcb75b",
-                  "#b6c2ff",
-                  "#96edc1",
-                  "#fcb75b",
-                  "#b6c2ff",
-                  "#96edc1",
-                  "#fcb75b",
-                  "#b6c2ff",
-                  "#96edc1",
-                  "#fcb75b",
-                ];
-                return colors[params.dataIndex];
-              },
-            },
-          },
+
           xAxisIndex: 0,
           yAxisIndex: 0,
         },
@@ -209,27 +284,7 @@ exports.MachineData = class MachineData {
               color: "#555",
             },
           },
-          itemStyle: {
-            normal: {
-              color: (params) => {
-                let colors = [
-                  "#4150d8",
-                  "#28bf7e",
-                  "#ed7c2f",
-                  "#4150d8",
-                  "#28bf7e",
-                  "#ed7c2f",
-                  "#4150d8",
-                  "#28bf7e",
-                  "#ed7c2f",
-                  "#4150d8",
-                  "#28bf7e",
-                  "#ed7c2f",
-                ];
-                return colors[params.dataIndex];
-              },
-            },
-          },
+
           xAxisIndex: 0,
           yAxisIndex: 0,
         },
@@ -281,7 +336,7 @@ exports.MachineData = class MachineData {
     //querying new data
     await pool
       .query(
-        `SELECT * FROM public."${params.query.machine_name}" WHERE created_at BETWEEN '${params.query.startDate}' AND '${params.query.endDate}'`
+        `SELECT * FROM public."${params.query.machine_name}" WHERE created_at BETWEEN '${params.query.newStartDate}' AND '${params.query.newEndDate}'`
       )
       .then((res) => {
         if (res.rows.length !== 0) {
@@ -305,25 +360,43 @@ exports.MachineData = class MachineData {
       });
     newMachineData = separateObject(newResult);
     oldMachineData = separateObject(oldResult);
-
+    // console.log(newMachineData, oldMachineData);
+    // calculate the rejection new and old precantage
     let newPrecentage =
       (newMachineData[1].rejected * 100) / newMachineData[0].inspected;
     let oldPrecentage =
       oldMachineData[1] === undefined
         ? 0
         : (oldMachineData[1].rejected * 100) / oldMachineData[0].inspected;
+
     params.query.machine_sensors.sensors.forEach((sensor, i) => {
       let width = 0;
+      // console.log(sensor);
+      let sensorName = sensor.id.toLowerCase();
       sensor.counter.forEach((defect, index) => {
         let newData, oldData;
         newMachineData.forEach((obj) => {
-          if (Object.keys(obj)[0].indexOf(defect.id.toLowerCase()) > -1) {
-            newData = obj[Object.keys(obj)[0]];
+          if (
+            Object.keys(obj)[0].indexOf(
+              sensorName + "_" + defect.id.toLowerCase()
+            ) > -1
+          ) {
+            newData = {
+              value: obj[Object.keys(obj)[0]],
+              itemStyle: { color: colors[i + 2][index + 1] },
+            };
           }
         });
         oldMachineData.forEach((obj) => {
-          if (Object.keys(obj)[0].indexOf(defect.id.toLowerCase()) > -1) {
-            oldData = obj[Object.keys(obj)[0]];
+          if (
+            Object.keys(obj)[0].indexOf(
+              sensorName + "_" + defect.id.toLowerCase()
+            ) > -1
+          ) {
+            oldData = {
+              value: obj[Object.keys(obj)[0]],
+              itemStyle: { color: colors[i][index + 1] },
+            };
           }
         });
         if ((newData && newData !== 0) || (oldData && oldData !== 0)) {
@@ -333,7 +406,9 @@ exports.MachineData = class MachineData {
           //to calcualte the total width of the sensors
           width++;
           totalwidth++;
-          console.log(width, totalwidth, sensor.id, defect.id);
+          //console.log(width, totalwidth, sensor.id, defect.id);
+          oldColors.push(colors[i][index + 1]);
+          newColors.push(colors[i + 2][index + 1]);
         }
       });
       let sensorData = {
@@ -352,13 +427,13 @@ exports.MachineData = class MachineData {
         barWidth: 100 * width,
         itemStyle: {
           normal: {
-            color: presetPalettes.blue[i + 2],
+            color: colors[i][0],
           },
         },
         xAxisIndex: 1,
         yAxisIndex: 1,
       };
-      console.log(sensorData.itemStyle.normal.color);
+      //console.log(sensorData.itemStyle.normal.color);
       sensorData.data = [
         {
           name: sensor.id.replace(/_/g, " "),
