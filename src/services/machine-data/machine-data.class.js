@@ -126,19 +126,28 @@ exports.MachineData = class MachineData {
       moment(params.query.newStartDate).from(params.query.oldStartDate)
     );
     let option = {
+      color: [
+        "#ae1029",
+        "#0065c2",
+        "#26c238",
+        "#9876aa",
+        "#fb8649",
+        "#57904b",
+        "#d35b5c",
+      ],
       tooltip: {
         trigger: "axis",
         axisPointer: {
           type: "shadow",
         },
       },
-      // title: {
-      //   text: params.query.machine_name.replace(/_/g, " "),
-      //   textStyle: {
-      //     fontSize: 24,
-      //   },
-      //   left: "40%",
-      // },
+      dataZoom: {
+        type: "slider",
+        show: true,
+        start: 0,
+        xAxisIndex: 0,
+      },
+
       legend: {
         top: 20,
         right: 150,
@@ -159,17 +168,10 @@ exports.MachineData = class MachineData {
           bottom: 40,
         },
       ],
-      toolbox: {
-        show: true,
-        orient: "vertical",
-        left: "right",
-        top: "center",
-        feature: {
-          mark: { show: true },
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ["line", "bar", "stack", "tiled"] },
-          restore: { show: true },
-          saveAsImage: { show: true },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
         },
       },
       xAxis: [
@@ -183,9 +185,8 @@ exports.MachineData = class MachineData {
             align: "right",
             verticalAlign: "middle",
             position: "insideBottom",
-            padding: [0, 0, 0, 0],
-            backgroundColor: "red",
-            color: "#333",
+            padding: [0, 10, 0, 0],
+            color: "black",
             fontSize: 16,
             rich: {
               name: {},
@@ -264,7 +265,7 @@ exports.MachineData = class MachineData {
             textStyle: {
               verticalAlign: "bottom",
               align: "center",
-              color: "#555",
+              color: "black",
             },
           },
 
@@ -360,10 +361,12 @@ exports.MachineData = class MachineData {
       });
     newMachineData = separateObject(newResult);
     oldMachineData = separateObject(oldResult);
-    // console.log(newMachineData, oldMachineData);
+    console.log(newMachineData, oldMachineData);
     // calculate the rejection new and old precantage
     let newPrecentage =
-      (newMachineData[1].rejected * 100) / newMachineData[0].inspected;
+      newMachineData[1] === undefined
+        ? 0
+        : (newMachineData[1].rejected * 100) / newMachineData[0].inspected;
     let oldPrecentage =
       oldMachineData[1] === undefined
         ? 0
@@ -383,7 +386,7 @@ exports.MachineData = class MachineData {
           ) {
             newData = {
               value: obj[Object.keys(obj)[0]],
-              itemStyle: { color: colors[i + 2][index + 1] },
+              itemStyle: { color: colors[i][index + 1] },
             };
           }
         });
@@ -395,11 +398,26 @@ exports.MachineData = class MachineData {
           ) {
             oldData = {
               value: obj[Object.keys(obj)[0]],
-              itemStyle: { color: colors[i][index + 1] },
+              itemStyle: {
+                borderWidth: 1,
+                borderColor: colors[i][index + 1],
+                color: "white",
+                decal: {
+                  color: colors[i][index + 1],
+
+                  dashArrayX: [1, 0],
+                  dashArrayY: [2, 5],
+                  symbolSize: 1,
+                  rotation: Math.PI / 6,
+                },
+              },
             };
           }
         });
-        if ((newData && newData !== 0) || (oldData && oldData !== 0)) {
+        if (
+          (newData && newData.value !== 0) ||
+          (oldData && oldData.value !== 0)
+        ) {
           data.y1Data.push(newData);
           data.yData.push(oldData);
           data.xData.push(defect.id);
@@ -407,8 +425,6 @@ exports.MachineData = class MachineData {
           width++;
           totalwidth++;
           //console.log(width, totalwidth, sensor.id, defect.id);
-          oldColors.push(colors[i][index + 1]);
-          newColors.push(colors[i + 2][index + 1]);
         }
       });
       let sensorData = {
@@ -419,16 +435,14 @@ exports.MachineData = class MachineData {
           formatter: "{b}",
           offset: [0, 0],
           textStyle: {
-            color: "#777",
+            color: "black",
           },
         },
         type: "bar",
         barGap: 0,
         barWidth: 100 * width,
         itemStyle: {
-          normal: {
-            color: colors[i][0],
-          },
+          color: colors[i][0],
         },
         xAxisIndex: 1,
         yAxisIndex: 1,
