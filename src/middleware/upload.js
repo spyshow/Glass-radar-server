@@ -1,5 +1,6 @@
 module.exports = function () {
   const upload = async (req, res) => {
+    console.log(req);
     const { user } = req;
     console.log(user);
     try {
