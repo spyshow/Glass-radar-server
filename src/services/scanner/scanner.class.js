@@ -73,9 +73,10 @@ exports.Scanner = class Scanner {
   async patch(id, data, params) {}
   // stop the scanning for a specific machines
   async remove(data, params) {
+    console.log(data);
     const lines = this.app.service("lines");
     await pool
-      .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data] })
+      .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
