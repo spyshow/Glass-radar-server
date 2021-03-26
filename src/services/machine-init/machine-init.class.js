@@ -67,6 +67,7 @@ exports.MachineInit = class MachineInit {
         url,
         //"http://192.168.0.191/webservice/cwebservice.asmx?wsdl",
         function (err, client) {
+          if (err) throw err;
           if (typeof client === "undefined") {
             console.log("waiting Client ... ");
             setTimeout(learnSensors, 60000, url, machine_name, id);
@@ -85,7 +86,7 @@ exports.MachineInit = class MachineInit {
                 }
               } else {
                 parseString(xml.CountsResult, function (err, result) {
-                  console.log(result);
+                  console.log(xml);
                   if (result === null) {
                     console.log("waiting result ... ");
                     setTimeout(learnSensors, 60000, url, machine_name, id);
