@@ -1,100 +1,399 @@
 {
-  "attributes": {
-    "id": "0"
+  "tooltip": { "trigger": "axis", "axisPointer": { "type": "shadow" } },
+  "dataZoom": [
+    { "type": "slider", "show": true, "start": 0, "xAxisIndex": 0 },
+    {
+      "type": "inside",
+      "xAxisIndex": [0],
+      "gridIndex": 1,
+      "start": 0,
+      "end": 100
+    }
+  ],
+  "legend": {
+    "top": 20,
+    "right": 150,
+    "orient": "vertical",
+    "data": ["Previous time", "selected date"],
+    "formatter": "{name} (in 7 days)"
   },
-  "Inspected": "224",
-  "Rejects": "7",
-  "Defects": "7",
-  "Autoreject": "0",
-  "Sensor": [
+  "grid": [
+    { "top": 100, "bottom": 201 },
+    { "height": 160, "bottom": 40 }
+  ],
+  "aria": { "enabled": true, "decal": { "show": true } },
+  "xAxis": [
     {
-      "attributes": {
-        "id": "42"
+      "type": "category",
+      "data": [
+        "Sidewallother",
+        "Stone",
+        "Blister",
+        "Drawn",
+        "Sideobject",
+        "Density",
+        "Wing",
+        "BlackImage",
+        "Stress",
+        "Error",
+        "Blackimage",
+        "Verticality",
+        "Diameter",
+        "Height"
+      ],
+      "gridIndex": 0,
+      "axisLabel": {
+        "show": true,
+        "rotate": 90,
+        "align": "right",
+        "verticalAlign": "middle",
+        "position": "insideBottom",
+        "padding": [0, 10, 0, 0],
+        "color": "black",
+        "fontSize": 16,
+        "rich": { "name": {} }
       },
-      "Rejects": "1",
-      "Defects": "1",
-      "Counter": [
+      "axisLine": { "lineStyle": { "color": "#e7e7e7" } },
+      "axisTick": { "lineStyle": { "color": "#e7e7e7" } },
+      "zlevel": 2
+    },
+    {
+      "type": "category",
+      "gridIndex": 1,
+      "axisLine": { "show": false },
+      "zlevel": 1
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "gridIndex": 0,
+      "axisLabel": { "color": "#333" },
+      "splitLine": { "lineStyle": { "type": "dashed" } },
+      "axisLine": { "lineStyle": { "color": "#ccc" } },
+      "textStyle": {},
+      "axisTick": { "lineStyle": { "color": "#ccc" } }
+    },
+    {
+      "type": "value",
+      "gridIndex": 1,
+      "axisLabel": { "show": false },
+      "axisLine": { "show": false },
+      "splitLine": { "show": false },
+      "axisTick": { "show": false }
+    }
+  ],
+  "series": [
+    {
+      "name": "Previous time",
+      "data": [
         {
-          "attributes": {
-            "id": "7",
-            "Nb": "1"
+          "value": 144,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#2d350a",
+            "color": "white",
+            "decal": {
+              "color": "#2d350a",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
           }
         },
         {
-          "attributes": {
-            "id": "25",
-            "Nb": "1"
+          "value": 256,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#3a440c",
+            "color": "white",
+            "decal": {
+              "color": "#3a440c",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 238,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#47530f",
+            "color": "white",
+            "decal": {
+              "color": "#47530f",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 393,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#5a6913",
+            "color": "white",
+            "decal": {
+              "color": "#5a6913",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 18,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#677916",
+            "color": "white",
+            "decal": {
+              "color": "#677916",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 0,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#7a8f1a",
+            "color": "white",
+            "decal": {
+              "color": "#7a8f1a",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 12,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#a7c424",
+            "color": "white",
+            "decal": {
+              "color": "#a7c424",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 125,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#c2dd46",
+            "color": "white",
+            "decal": {
+              "color": "#c2dd46",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 125,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#001f2f",
+            "color": "white",
+            "decal": {
+              "color": "#001f2f",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 125,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#01273d",
+            "color": "white",
+            "decal": {
+              "color": "#01273d",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 6,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#01304a",
+            "color": "white",
+            "decal": {
+              "color": "#01304a",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 296,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#4c0000",
+            "color": "white",
+            "decal": {
+              "color": "#4c0000",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 887,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#780000",
+            "color": "white",
+            "decal": {
+              "color": "#780000",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
+          }
+        },
+        {
+          "value": 2159,
+          "itemStyle": {
+            "borderWidth": 1,
+            "borderColor": "#980000",
+            "color": "white",
+            "decal": {
+              "color": "#980000",
+              "dashArrayX": [1, 0],
+              "dashArrayY": [2, 5],
+              "symbolSize": 1,
+              "rotation": 0.5235987755982988
+            }
           }
         }
-      ]
-    },
-    {
-      "attributes": {
-        "id": "16"
-      },
-      "Rejects": "0",
-      "Defects": "0"
-    },
-    {
-      "attributes": {
-        "id": "40"
-      },
-      "Rejects": "0",
-      "Defects": "0"
-    },
-    {
-      "attributes": {
-        "id": "121"
-      },
-      "Rejects": "4",
-      "Defects": "4",
-      "Counter": [
-        {
-          "attributes": {
-            "id": "1",
-            "Nb": "1"
-          }
-        },
-        {
-          "attributes": {
-            "id": "3",
-            "Nb": "1"
-          }
-        },
-        {
-          "attributes": {
-            "id": "9",
-            "Nb": "3"
-          }
-        },
-        {
-          "attributes": {
-            "id": "11",
-            "Nb": "3"
-          }
+      ],
+      "type": "bar",
+      "label": {
+        "show": true,
+        "position": "top",
+        "textStyle": {
+          "verticalAlign": "bottom",
+          "align": "center",
+          "color": "black"
         }
-      ]
+      },
+      "xAxisIndex": 0,
+      "yAxisIndex": 0,
+      "barWidth": "NaN%"
     },
     {
-      "attributes": {
-        "id": "46"
-      },
-      "Rejects": "4",
-      "Defects": "4",
-      "Counter": [
-        {
-          "attributes": {
-            "id": "1",
-            "Nb": "1"
-          }
-        },
-        {
-          "attributes": {
-            "id": "2",
-            "Nb": "3"
-          }
+      "name": "selected date",
+      "data": [
+        { "value": 81, "itemStyle": { "color": "#2d350a" } },
+        { "value": 187, "itemStyle": { "color": "#3a440c" } },
+        { "value": 121, "itemStyle": { "color": "#47530f" } },
+        { "value": 386, "itemStyle": { "color": "#5a6913" } },
+        { "value": 8, "itemStyle": { "color": "#677916" } },
+        { "value": 3, "itemStyle": { "color": "#7a8f1a" } },
+        { "value": 23, "itemStyle": { "color": "#a7c424" } },
+        { "value": 71, "itemStyle": { "color": "#c2dd46" } },
+        { "value": 71, "itemStyle": { "color": "#001f2f" } },
+        { "value": 71, "itemStyle": { "color": "#01273d" } },
+        { "value": 5, "itemStyle": { "color": "#01304a" } },
+        { "value": 0, "itemStyle": { "color": "#4c0000" } },
+        { "value": 1670, "itemStyle": { "color": "#780000" } },
+        { "value": 1502, "itemStyle": { "color": "#980000" } }
+      ],
+      "type": "bar",
+      "label": {
+        "show": true,
+        "position": "top",
+        "textStyle": {
+          "verticalAlign": "middle",
+          "align": "center",
+          "color": "#555"
         }
-      ]
+      },
+      "xAxisIndex": 0,
+      "yAxisIndex": 0,
+      "barWidth": "NaN%"
+    },
+    {
+      "min": 1,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "formatter": "{b}",
+        "offset": [0, 0],
+        "textStyle": { "color": "black" }
+      },
+      "type": "bar",
+      "barGap": 0,
+      "barWidth": "57.142857142857146%",
+      "itemStyle": { "color": "#A8C545" },
+      "xAxisIndex": 1,
+      "yAxisIndex": 1,
+      "data": [{ "name": "Sidewall", "value": 1 }]
+    },
+    {
+      "min": 1,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "formatter": "{b}",
+        "offset": [0, 0],
+        "textStyle": { "color": "black" }
+      },
+      "type": "bar",
+      "barGap": 0,
+      "barWidth": "21.428571428571427%",
+      "itemStyle": { "color": "#0067A6" },
+      "xAxisIndex": 1,
+      "yAxisIndex": 1,
+      "data": [{ "name": "Stress", "value": 1 }]
+    },
+    {
+      "min": 1,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "formatter": "{b}",
+        "offset": [0, 0],
+        "textStyle": { "color": "black" }
+      },
+      "type": "bar",
+      "barGap": 0,
+      "barWidth": "21.428571428571427%",
+      "itemStyle": { "color": "#C30F0E" },
+      "xAxisIndex": 1,
+      "yAxisIndex": 1,
+      "data": [{ "name": "Dim", "value": 1 }]
     }
   ]
 }

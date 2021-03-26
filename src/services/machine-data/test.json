@@ -1,0 +1,140 @@
+{
+  "tooltip": { "trigger": "axis", "axisPointer": { "type": "shadow" } },
+  "legend": {
+    "top": 20,
+    "right": 150,
+    "orient": "vertical",
+    "data": ["Previous time", "selected date"],
+    "formatter": "{name} (in 7 days)"
+  },
+  "grid": [
+    { "top": 100, "bottom": 201 },
+    { "height": 160, "bottom": 40 }
+  ],
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "left": "right",
+    "top": "center",
+    "feature": {
+      "mark": { "show": true },
+      "dataView": { "show": true, "readOnly": false },
+      "magicType": { "show": true, "type": ["line", "bar", "stack", "tiled"] },
+      "restore": { "show": true },
+      "saveAsImage": { "show": true }
+    }
+  },
+  "xAxis": [
+    {
+      "type": "category",
+      "data": ["LNM", "Plug", "Check", "Leak", "unknow", "Thickness"],
+      "gridIndex": 0,
+      "axisLabel": {
+        "show": true,
+        "rotate": 90,
+        "align": "right",
+        "verticalAlign": "middle",
+        "position": "insideBottom",
+        "padding": [0, 0, 0, 0],
+        "backgroundColor": "red",
+        "color": "#333",
+        "fontSize": 16,
+        "rich": { "name": {} }
+      },
+      "axisLine": { "lineStyle": { "color": "#e7e7e7" } },
+      "axisTick": { "lineStyle": { "color": "#e7e7e7" } },
+      "zlevel": 2
+    },
+    {
+      "type": "category",
+      "gridIndex": 1,
+      "axisLine": { "show": false },
+      "zlevel": 1
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "gridIndex": 0,
+      "axisLabel": { "color": "#333" },
+      "splitLine": { "lineStyle": { "type": "dashed" } },
+      "axisLine": { "lineStyle": { "color": "#ccc" } },
+      "axisTick": { "lineStyle": { "color": "#ccc" } }
+    },
+    {
+      "type": "value",
+      "gridIndex": 1,
+      "axisLabel": { "show": false },
+      "axisLine": { "show": false },
+      "splitLine": { "show": false },
+      "axisTick": { "show": false }
+    }
+  ],
+  "series": [
+    {
+      "name": "Previous time",
+      "data": [
+        { "value": 844, "itemStyle": { "color": "#2d350a" } },
+        { "value": 844, "itemStyle": { "color": "#3a440c" } },
+        { "value": 575, "itemStyle": { "color": "#47530f" } },
+        { "value": 2003, "itemStyle": { "color": "#5a6913" } },
+        { "value": 118, "itemStyle": { "color": "#677916" } },
+        { "value": 118, "itemStyle": { "color": "#7a8f1a" } }
+      ],
+      "type": "bar",
+      "label": {
+        "show": true,
+        "position": "top",
+        "verticalAlign": "bottom",
+        "align": "center",
+        "color": "#555"
+      },
+      "xAxisIndex": 0,
+      "yAxisIndex": 0,
+      "barWidth": "NaN%"
+    },
+    {
+      "name": "selected date",
+      "data": [
+        { "value": 4515, "itemStyle": { "color": "#4c0000" } },
+        { "value": 4515, "itemStyle": { "color": "#620000" } },
+        { "value": 2906, "itemStyle": { "color": "#780000" } },
+        { "value": 2157, "itemStyle": { "color": "#980000" } },
+        { "value": 127, "itemStyle": { "color": "#ae0000" } },
+        { "value": 127, "itemStyle": { "color": "#cf0000" } }
+      ],
+      "type": "bar",
+      "label": {
+        "show": true,
+        "position": "top",
+        "verticalAlign": "middle",
+        "align": "center",
+        "color": "#555"
+      },
+      "xAxisIndex": 0,
+      "yAxisIndex": 0,
+      "barWidth": "NaN%"
+    },
+    {
+      "min": 1,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "formatter": "{b}",
+        "offset": [0, 0],
+        "color": "#777"
+      },
+      "type": "bar",
+      "barGap": 0,
+      "barWidth": "100%",
+      "itemStyle": { "color": "#A8C545" },
+      "xAxisIndex": 1,
+      "yAxisIndex": 1,
+      "data": [{ "name": "MX4", "value": 1 }]
+    }
+  ],
+  "aria": {
+    "enabled": true,
+    "decal": { "show": true, "color": "red", "symbol": "rect" }
+  }
+}
