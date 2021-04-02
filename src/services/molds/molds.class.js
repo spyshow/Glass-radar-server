@@ -15,7 +15,6 @@ exports.Molds = class Molds {
   }
 
   async get(id, params) {
-    console.log(id);
     let returnedData;
     await pool
       .query({
@@ -24,7 +23,6 @@ exports.Molds = class Molds {
       })
       .then((result) => {
         let machine = result.rows[0];
-        console.log(machine);
         returnedData = scanMolds(machine, this.app).then((data) => {
           return {
             mountedMolds: data.mountedMolds.value,
@@ -33,7 +31,6 @@ exports.Molds = class Molds {
         });
       });
 
-    console.log(returnedData);
     return returnedData;
   }
 
