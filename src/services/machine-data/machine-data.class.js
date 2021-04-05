@@ -372,7 +372,7 @@ exports.MachineData = class MachineData {
         ? 0
         : (oldMachineData[1].rejected * 100) / oldMachineData[0].inspected;
 
-    params.query.machine_sensors.sensors.forEach((sensor, i) => {
+    params.query.machine_sensors.sensors.map((sensor, i) => {
       let width = 0;
       // console.log(sensor);
       let sensorName = sensor.id.toLowerCase();
@@ -456,15 +456,20 @@ exports.MachineData = class MachineData {
       ];
       option.series.push(sensorData);
     });
+
     //to remove the sensor if it has no data & calculate the total width of the sensor bar width
+    console.log(option.series);
+    let deleteSensorIndex = [];
     option.series.forEach((sensor, i) => {
-      if (sensor.barWidth === 0) {
-        option.series.splice(i, 1);
-      } else {
+      if (sensor.barWidth !== 0) {
         sensor.barWidth = sensor.barWidth / totalwidth + "%";
+      } else {
+        deleteSensorIndex.push(i);
       }
     });
-
+    for (let s = 0; s < deleteSensorIndex.length; s++) {
+      option.series.splice(deleteSensorIndex[s], 1);
+    }
     return {
       data: [option],
       newPrecentage: round(newPrecentage, 2),
