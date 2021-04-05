@@ -31,9 +31,9 @@ exports.MachineCard = class MachineCard {
     let lastHour = { accepted: 0, rejected: 0 };
     let beforeLastHour = { accepted: 0, rejected: 0 };
     let percentage = "";
-    //console.log(params.sequelize.include.model);
+    let minRange = 0;
+
     let option = {
-      color: ["#80FFA5", "#00DDFF", "#37A2FF", "#FF0087", "#FFBF00"],
       tooltip: {
         trigger: "axis",
         axisPointer: {
@@ -77,6 +77,7 @@ exports.MachineCard = class MachineCard {
         {
           type: "value",
           min: 70,
+          max: 110,
         },
       ],
       series: [],
@@ -89,17 +90,18 @@ exports.MachineCard = class MachineCard {
          as interval_alias
         FROM public."${params.query.machine_name}_${params.query.line_number}" 
         where created_at > '${moment()
-          .subtract(params.query.oldDate + 600, "hours")
+          .subtract(params.query.oldDate, "hours")
           .format()}'
         GROUP BY interval_alias
         order by interval_alias`
       )
       .then((res) => {
+        console.log(res.rows.length);
         if (res.rows.length !== 0) {
           let lineOption = {
             name: params.query.machine_name,
             type: "line",
-            smooth: true,
+            smooth: false,
             lineStyle: {
               width: 0,
             },
@@ -125,19 +127,30 @@ exports.MachineCard = class MachineCard {
           };
           let xAxis = [];
           res.rows.map((row) => {
-            lineOption.data.push(
-              round(100 - (row.rejected * 100) / row.inspected, 2)
-            );
+            let percent = round(100 - (row.rejected * 100) / row.inspected, 2);
+            lineOption.data.push(percent);
+            minRange > percent ? null : (minRange = percent);
             xAxis.push(moment(row.interval_alias).hour());
-            console.log(moment(row.interval_alias).hour());
           });
-
+          if (minRange - 20 < 0) {
+            minRange = 0;
+          }
+          if (res.rows.length < 2) {
+            res.rows.unshift({
+              rejected: 0,
+              inspected: 0,
+              interval_alias: moment(res.rows[0].interval_alias)
+                .subtract(1, "hours")
+                .format(),
+            });
+          }
+          console.log(res.rows);
+          option.yAxis.min = minRange - 20;
           lastHour.rejected = round(
             (res.rows[res.rows.length - 1].rejected * 100) /
               res.rows[res.rows.length - 1].inspected,
             2
           );
-          console.log(res.rows[res.rows.length - 1].inspected);
           lastHour.accepted = round(
             100 -
               (res.rows[res.rows.length - 1].rejected * 100) /
@@ -157,7 +170,7 @@ exports.MachineCard = class MachineCard {
           );
           percentage =
             lastHour.rejected > beforeLastHour.rejected ? "down" : "up";
-          option.xAxis[0].data = xAxis;
+          option.xAxis[0].data.push(...xAxis);
           option.series = lineOption;
         }
       });
