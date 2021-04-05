@@ -181,9 +181,7 @@ const scanMachine = (machine, line_number, app) => {
                             console.log(result.Mold);
                             sensorArray[sensorIndex - 5] = s2n(
                               // insert value of counter to sensor array
-                              result.Mold.Machine[0].Sensor[index].Counter[i][
-                                "$"
-                              ].Nb
+                              result.Mold.Sensor[index].Counter[i]["$"].Nb
                             );
                           }
 
@@ -247,6 +245,7 @@ const scanMachine = (machine, line_number, app) => {
                           let insertQuery2 = " VALUES ";
                           let sensorIndex = 1;
 
+                          
                           result.Mold.map((mold, moldIndex) => {
                             insertQuery2 += " (uuid_generate_v4(),";
                             for (var i = 0; i < 4; i++) {
