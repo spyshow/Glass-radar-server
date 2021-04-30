@@ -104,9 +104,10 @@ exports.MachineInit = class MachineInit {
     return "done";
   }
 
-  // async update(id, data, params) {
-  //   return data;
-  // }
+  async update(id, data, params) {
+    
+    return data;
+  }
 
   // async patch(id, data, params) {
   //   return data;
