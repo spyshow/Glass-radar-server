@@ -245,7 +245,6 @@ const scanMachine = (machine, line_number, app) => {
                           let insertQuery2 = " VALUES ";
                           let sensorIndex = 1;
 
-                          
                           result.Mold.map((mold, moldIndex) => {
                             insertQuery2 += " (uuid_generate_v4(),";
                             for (var i = 0; i < 4; i++) {
@@ -300,21 +299,31 @@ const scanMachine = (machine, line_number, app) => {
 
                           machine.sensors.sensors.map((sensor, index) => {
                             //loop through all the sensors
-                            for (var i = 0; i < sensor.counter.length; i++) {
-                              //loop through the counters of the sensor
-                              insertQuery1 +=
-                                sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
-
-                              insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
-
+                            if (sensor.counter.length === 1) {
+                              insertQuery1 += sensor.id + ",";
+                              insertQuery2 += "$" + sensorIndex + " ,";
+                              
                               sensorArray[sensorIndex - 5] = s2n(
                                 // insert value of counter to sensor array
-                                result.Mold.Machine[0].Sensor[index].Counter[i][
-                                  "$"
-                                ].Nb
+                                result.Mold.Machine[0].Sensor[index]["Rejects"]
                               );
+                              sensorIndex++;
+                            } else {
+                              for (var i = 0; i < sensor.counter.length; i++) {
+                                //loop through the counters of the sensor
+                                insertQuery1 +=
+                                  sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
+                                insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
+                                
+                                sensorArray[sensorIndex - 5] = s2n(
+                                  // insert value of counter to sensor array
+                                  result.Mold.Machine[0].Sensor[index].Counter[
+                                    i
+                                  ]["$"].Nb
+                                );
 
-                              sensorIndex++; // increase the index by 1
+                                sensorIndex++; // increase the index by 1
+                              }
                             }
                           });
                           insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
@@ -332,6 +341,7 @@ const scanMachine = (machine, line_number, app) => {
                           s2n(result.Mold.$.id),
                           ...sensorArray,
                         ];
+                        console.log(insertQuery, values);
                         //DONE GATHERING THE INSERT VALUES
                         //INSERT VALUES TO DB
                         //console.log(values);

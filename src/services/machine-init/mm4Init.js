@@ -1,20 +1,55 @@
 /* eslint-disable linebreak-style */
 const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
   const sensorObj = { sensors: [] };
+
   let machine = result.Mold.Machine[0];
   machine.Sensor.map((sensor) => {
     let counters = [];
     let sensorName = sensor.$.id;
-    for (let i = 0; i < Object.keys(sensor.Counter).length; i++) {
-      let counterId = sensor.Counter[i]["$"].id.replace(/[^A-Z0-9]/gi, "");
-      insertQuery += sensorName + "_" + counterId + " integer,";
+    let counter = {};
+    console.log(sensor.$.id);
+    if (Array.isArray(sensor.Counter)) {
+      console.log("its array", Array.isArray(sensor.Counter));
+      counter = sensor.Counter;
+      for (let i = 0; i < counter.length; i++) {
+        console.log(sensor);
+        let counterId = sensor.Counter[i]["$"].id.replace(/[^A-Z0-9]/gi, "");
+        insertQuery += sensorName + "_" + counterId + " integer,";
+
+        counters.push({ id: counterId });
+      }
+      sensorObj.sensors.push({
+        id: sensorName,
+        counter: counters,
+      });
+    } else if (sensor.Counter === undefined) {
+      counter = Object.keys(sensor);
+      console.log(counter);
+
+      let counterId = sensor["$"].id.replace(/[^A-Z0-9]/gi, "");
+      insertQuery += sensorName + " integer,";
 
       counters.push({ id: counterId });
+
+      sensorObj.sensors.push({
+        id: sensorName,
+        counter: counters,
+      });
+    } else {
+      counter = Object.keys(sensor.Counter);
+      console.log(counter);
+      for (let i = 0; i < counter.length; i++) {
+        console.log(sensor);
+        let counterId = sensor.Counter[i]["$"].id.replace(/[^A-Z0-9]/gi, "");
+        insertQuery += sensorName + "_" + counterId + " integer,";
+
+        counters.push({ id: counterId });
+      }
+      sensorObj.sensors.push({
+        id: sensorName,
+        counter: counters,
+      });
     }
-    sensorObj.sensors.push({
-      id: sensorName,
-      counter: counters,
-    });
   });
   insertQuery +=
     "created_at timestamp with time zone,updated_at timestamp with time zone, " +
