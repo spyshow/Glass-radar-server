@@ -9,6 +9,8 @@ const lines = require("./lines/lines.service.js");
 const machineData = require("./machine-data/machine-data.service.js");
 const molds = require("./molds/molds.service.js");
 const machineCard = require('./machine-card/machine-card.service.js');
+const lineData = require('./line-data/line-data.service.js');
+const linespeed = require('./linespeed/linespeed.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -21,4 +23,6 @@ module.exports = function (app) {
   app.configure(machineData);
   app.configure(molds);
   app.configure(machineCard);
+  app.configure(lineData);
+  app.configure(linespeed);
 };
