@@ -56,8 +56,7 @@ exports.MachineInit = class MachineInit {
     console.log(lineData.line_number);
     let machine_and_line =
       data.machine_name + "_" + lineData.line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
-
-    function learnSensors(url, machine_name, id) {
+    function learnMMMSensors(url, machine_name, id) {
       let insertQuery =
         'CREATE TABLE IF NOT EXISTS "' +
         machine_name +
@@ -70,7 +69,7 @@ exports.MachineInit = class MachineInit {
           if (err) throw err;
           if (typeof client === "undefined") {
             console.log("waiting Client ... ");
-            setTimeout(learnSensors, 60000, url, machine_name, id);
+            setTimeout(learnMMMSensors, 60000, url, machine_name, id);
           } else {
             console.log("S", data.type);
             //calling soap api
@@ -80,7 +79,7 @@ exports.MachineInit = class MachineInit {
               if (data.type === "MX4") {
                 if (xml.CountsResult === null) {
                   console.log("waiting result ... ");
-                  setTimeout(learnSensors, 60000, url, machine_name, id);
+                  setTimeout(learnMMMSensors, 60000, url, machine_name, id);
                 } else {
                   mx4Init(xml, insertQuery, machine_name, id, pool);
                 }
@@ -89,7 +88,7 @@ exports.MachineInit = class MachineInit {
                   console.log(xml);
                   if (result === null) {
                     console.log("waiting result ... ");
-                    setTimeout(learnSensors, 60000, url, machine_name, id);
+                    setTimeout(learnMMMSensors, 60000, url, machine_name, id);
                   } else {
                     mm4Init(result, insertQuery, machine_name, id, pool);
                   }
@@ -100,12 +99,33 @@ exports.MachineInit = class MachineInit {
         }
       );
     }
-    learnSensors(data.url, machine_and_line, data.id);
+    if (
+      data.type !== "MX4" ||
+      data.type !== "MCAL4" ||
+      data.type !== "MULTI4"
+    ) {
+      let insertQuery =
+        'CREATE TABLE IF NOT EXISTS "' +
+        machine_and_line +
+        '" ( id uuid NOT NULL, machine_id integer, inspected integer, created_at timestamp with time zone,updated_at timestamp with time zone, ' +
+        "CONSTRAINT " +
+        machine_and_line +
+        "_pkey PRIMARY KEY (id), " +
+        "CONSTRAINT " +
+        machine_and_line +
+        "_machine_id_fkey FOREIGN KEY (machine_id) " +
+        "REFERENCES public.machines (id) MATCH SIMPLE " +
+        "ON UPDATE CASCADE " +
+        "ON DELETE CASCADE);";
+      console.log(insertQuery);
+      pool.query(insertQuery).catch((error) => console.log(error));
+    } else {
+      learnMMMSensors(data.url, machine_and_line, data.id);
+    }
     return "done";
   }
 
   async update(id, data, params) {
-    
     return data;
   }
 
