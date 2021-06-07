@@ -9,6 +9,11 @@ module.exports = function (app) {
   const linespeed = sequelizeClient.define(
     "linespeed",
     {
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+      },
       speed: {
         type: DataTypes.INTEGER,
         allowNull: false,
