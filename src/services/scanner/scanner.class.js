@@ -1,8 +1,13 @@
+/* eslint-disable indent */
 /* eslint-disable quotes */
 
 const pool = require("./../../db");
-const { scanMachine, removeMachine, updateMachine } = require("./scanMachine");
-
+const {
+  scanMMMMachine,
+  removeMMMMachine,
+  updateMMMMachine,
+} = require("./scanMMMMachine");
+const { scanSensor, removeSensor, updateSensor } = require("./scanSensors");
 /* eslint-disable no-unused-vars */
 exports.Scanner = class Scanner {
   constructor(options) {
@@ -17,7 +22,7 @@ exports.Scanner = class Scanner {
     pool.query("SELECT * FROM machines").then((res) => {
       let result = "";
       res.rows.map((machine) => {
-        result += scanMachine(machine);
+        result += scanMMMMachine(machine);
       });
     });
     return "done find";
@@ -32,7 +37,7 @@ exports.Scanner = class Scanner {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
           console.log(res);
-          scanMachine(machine, line.line_number, this.app);
+          scanMMMMachine(machine, line.line_number, this.app);
         });
         return "scanning";
       })
@@ -46,7 +51,17 @@ exports.Scanner = class Scanner {
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
-          scanMachine(machine, line.line_number, this.app);
+          switch (machine.type) {
+            case "MX4":
+            case "MULTI4":
+            case "MCAL4":
+              scanMMMMachine(machine, line.line_number, this.app);
+              break;
+            case "LI":
+            case "VI":
+            case "PALLETIZER":
+              scanSensor(machine, line.line_number, this.app);
+          }
         });
       })
       .catch((error) => console.log(error));
@@ -63,7 +78,17 @@ exports.Scanner = class Scanner {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
           console.log(line, data);
-          updateMachine(machine, line.line_number, data.scanTime);
+          switch (machine.type) {
+            case "MX4":
+            case "MULTI4":
+            case "MCAL4":
+              updateMMMMachine(machine, line.line_number, data.scanTime);
+              break;
+            case "LI":
+            case "VI":
+            case "PALLETIZER":
+              updateSensor(machine, line.line_number, data.scanTime);
+          }
         });
         return "done update";
       })
@@ -81,7 +106,17 @@ exports.Scanner = class Scanner {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
           console.log(line);
-          removeMachine(machine, line.line_number);
+          switch (machine.type) {
+            case "MX4":
+            case "MULTI4":
+            case "MCAL4":
+              removeMMMMachine(machine, line.line_number);
+              break;
+            case "LI":
+            case "VI":
+            case "PALLETIZER":
+              removeSensor(machine, line.line_number);
+          }
         });
       })
       .catch((error) => console.log(error));

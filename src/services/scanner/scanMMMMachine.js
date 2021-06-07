@@ -14,14 +14,14 @@ const soap = require("soap");
 const parseString = require("xml2js").parseString;
 const CronJobManager = require("cron-job-manager");
 const manager = new CronJobManager();
-const pool = require("./../../db");
+const pool = require("../../db");
 
 // function to change string to number
 let s2n = (string) => {
   return parseInt(string, 10);
 };
 
-const scanMachine = (machine, line_number, app) => {
+const scanMMMMachine = (machine, line_number, app) => {
   const mahcnieData = app.service("machine-data");
   //each machine
   let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
@@ -42,7 +42,7 @@ const scanMachine = (machine, line_number, app) => {
           function (err, client) {
             if (typeof client === "undefined") {
               //if the first call for the API it will return an empty respond
-              setTimeout(scanMachine, 60000, machine, line_number, app); // call the function again after 60 second
+              setTimeout(scanMMMMachine, 60000, machine, line_number, app); // call the function again after 60 second
             } else {
               //console.log(machine.type);
               //calling soap api
@@ -51,7 +51,7 @@ const scanMachine = (machine, line_number, app) => {
                   if (xml == null || typeof xml.CountsResult === "undefined") {
                     console.log("waiting result ... ");
                     // if the respond is empty
-                    setTimeout(scanMachine, 60000, machine, line_number, app); // try again in 60 second
+                    setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
                   } else {
                     let result = xml.CountsResult.Root.Machine;
                     //console.log(result.attributes.Id);
@@ -215,7 +215,7 @@ const scanMachine = (machine, line_number, app) => {
                   if (xml == null || typeof xml === "undefined") {
                     console.log("waiting result ... ");
                     // if the respond is empty
-                    setTimeout(scanMachine, 60000, machine, line_number, app); // try again in 60 second
+                    setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
                   } else {
                     parseString(xml.CountsResult, function (err, result) {
                       if (result == null) {
@@ -224,7 +224,7 @@ const scanMachine = (machine, line_number, app) => {
                         );
                         // if the respond is empty
                         setTimeout(
-                          scanMachine,
+                          scanMMMMachine,
                           60000,
                           machine,
                           line_number,
@@ -302,7 +302,7 @@ const scanMachine = (machine, line_number, app) => {
                             if (sensor.counter.length === 1) {
                               insertQuery1 += sensor.id + ",";
                               insertQuery2 += "$" + sensorIndex + " ,";
-                              
+
                               sensorArray[sensorIndex - 5] = s2n(
                                 // insert value of counter to sensor array
                                 result.Mold.Machine[0].Sensor[index]["Rejects"]
@@ -314,7 +314,7 @@ const scanMachine = (machine, line_number, app) => {
                                 insertQuery1 +=
                                   sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
                                 insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
-                                
+
                                 sensorArray[sensorIndex - 5] = s2n(
                                   // insert value of counter to sensor array
                                   result.Mold.Machine[0].Sensor[index].Counter[
@@ -375,7 +375,7 @@ const scanMachine = (machine, line_number, app) => {
   }
 };
 
-function removeMachine(machine, line_number) {
+function removeMMMMachine(machine, line_number) {
   //console.log(1);
   let machine_and_line =
     machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
@@ -390,12 +390,12 @@ function removeMachine(machine, line_number) {
   }
 }
 
-const updateMachine = function (machine, line_number, scanTime) {
+const updateMMMMachine = function (machine, line_number, scanTime) {
   let machine_and_line =
     machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
   manager.update(machine_and_line, scanTime);
 };
 
-exports.updateMachine = updateMachine;
-exports.removeMachine = removeMachine;
-exports.scanMachine = scanMachine;
+exports.updateMMMMachine = updateMMMMachine;
+exports.removeMMMMachine = removeMMMMachine;
+exports.scanMachine = scanMMMMachine;
