@@ -27,6 +27,10 @@ module.exports = function (app) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      lehr_time: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       total: {
         type: DataTypes.INTEGER,
         allowNull: false,
