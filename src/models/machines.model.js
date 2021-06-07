@@ -29,6 +29,10 @@ module.exports = function (app) {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      mac: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       speed: {
         type: DataTypes.INTEGER,
         allowNull: true,
