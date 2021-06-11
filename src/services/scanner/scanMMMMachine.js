@@ -15,26 +15,78 @@ const parseString = require("xml2js").parseString;
 const CronJobManager = require("cron-job-manager");
 const manager = new CronJobManager();
 const pool = require("../../db");
+const moment = require("moment");
 
 // function to change string to number
 let s2n = (string) => {
   return parseInt(string, 10);
 };
 
-const scanMMMMachine = (machine, line_number, app) => {
+async function scanMMMMachine(machine, line_number, app, lineId) {
   const mahcnieData = app.service("machine-data");
-  //each machine
+
   let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
   //example: MCAL_M22
   let machine_and_line =
     machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
-
   if (!manager.exists(machine_and_line)) {
     manager.add(
       //we add a corn job
       machine_and_line,
       scantime,
-      () => {
+      async () => {
+        let lineSpeed, lehrTime;
+        await app
+          .service("jobs")
+          .find({
+            query: {
+              active: true,
+              line: line_number,
+            },
+          })
+          .then((job) => {
+            lehrTime = job.data[0].lehr_time;
+          });
+        await app
+          .service("linespeed")
+          .find({
+            query: {
+              lineId: lineId,
+              createdAt: {
+                $lt: moment().add(60 * 1000 - lehrTime * 60 * 1000),
+                $gt: moment().subtract(60 * 1000 + lehrTime * 60 * 1000),
+              },
+              $limit: 1,
+              $sort: {
+                createdAt: -1,
+              },
+            },
+          })
+          .then(async (job) => {
+            console.log("67", job, lehrTime);
+
+            if (job.data.length < 1) {
+              console.log("les than lehr time");
+              await app
+                .service("jobs")
+                .find({
+                  query: {
+                    line: line_number,
+                    active: true,
+                    $limit: 1,
+                    $sort: {
+                      createdAt: -1,
+                    },
+                  },
+                })
+                .then((job) => {
+                  lineSpeed = job.data[0].speed;
+                });
+            } else {
+              lineSpeed = job.data[0].speed;
+            }
+          });
+        console.log("89", lineSpeed);
         //the function to loop in every scan time
         soap.createClient(
           //call the soap API
@@ -42,7 +94,14 @@ const scanMMMMachine = (machine, line_number, app) => {
           function (err, client) {
             if (typeof client === "undefined") {
               //if the first call for the API it will return an empty respond
-              setTimeout(scanMMMMachine, 60000, machine, line_number, app); // call the function again after 60 second
+              setTimeout(
+                scanMMMMachine,
+                60000,
+                machine,
+                line_number,
+                app,
+                lineId
+              ); // call the function again after 60 second
             } else {
               //console.log(machine.type);
               //calling soap api
@@ -51,7 +110,14 @@ const scanMMMMachine = (machine, line_number, app) => {
                   if (xml == null || typeof xml.CountsResult === "undefined") {
                     console.log("waiting result ... ");
                     // if the respond is empty
-                    setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
+                    setTimeout(
+                      scanMMMMachine,
+                      60000,
+                      machine,
+                      line_number,
+                      app,
+                      lineId
+                    ); // try again in 60 second
                   } else {
                     let result = xml.CountsResult.Root.Machine;
                     //console.log(result.attributes.Id);
@@ -66,19 +132,19 @@ const scanMMMMachine = (machine, line_number, app) => {
                     ) {
                       //TODO:
                       //if no mold number reader is installed
-
+                      console.log("135", lineId, lehrTime, lineSpeed);
                       //building Insert query
                       let insertQuery1 =
                         'INSERT INTO "' +
                         machine_and_line +
-                        '" (id,machine_id, inspected, rejected, mold ,';
+                        '" (id,machine_id, inspected, rejected,linespeed, mold ,';
                       //start building the values string
                       let insertQuery2 = " VALUES ";
                       let sensorIndex = 1;
 
                       result.Mold.map((mold, moldIndex) => {
                         insertQuery2 += " (uuid_generate_v4(),";
-                        for (var i = 0; i < 4; i++) {
+                        for (var i = 0; i < 5; i++) {
                           switch (i) {
                             case 0:
                               sensorArray[sensorIndex - 1] = machine.id;
@@ -94,6 +160,11 @@ const scanMMMMachine = (machine, line_number, app) => {
                               sensorArray[sensorIndex - 1] = s2n(mold.Rejects);
                               break;
                             case 3:
+                              console.log("119:linespeed ", lineSpeed);
+                              sensorArray[sensorIndex - 1] = s2n(lineSpeed);
+
+                              break;
+                            case 4:
                               sensorArray[sensorIndex - 1] = s2n(
                                 mold.attributes.id
                               );
@@ -151,6 +222,7 @@ const scanMMMMachine = (machine, line_number, app) => {
                       // console.log(insertQuery);
                     } else {
                       //building Insert query
+                      console.log("234", lineId, lehrTime, lineSpeed);
                       console.log(machine.type + " its an object");
                       let insertQuery1 =
                         'INSERT INTO "' +
@@ -158,11 +230,11 @@ const scanMMMMachine = (machine, line_number, app) => {
                         // "_" +
                         // machine.machine_line.replace(/[^A-Z0-9]/gi, "") +
                         machine_and_line +
-                        '" (id,machine_id, inspected, rejected, mold ,';
+                        '" (id,machine_id, inspected, rejected,linespeed, mold ,';
 
                       //start building the values string
                       let insertQuery2 =
-                        " VALUES (uuid_generate_v4(),$1,$2,$3, $4, ";
+                        " VALUES (uuid_generate_v4(),$1,$2,$3, $4, $5";
                       let sensorIndex = 5; // sensor array offset
                       console.log(machine.sensors);
                       machine.sensors.sensors.map((sensor, index) => {
@@ -211,11 +283,18 @@ const scanMMMMachine = (machine, line_number, app) => {
                     //DONE INSERTING VALUES TO DB
                   }
                 } else {
+                  console.log("mmm");
                   //if not MX4
                   if (xml == null || typeof xml === "undefined") {
                     console.log("waiting result ... ");
                     // if the respond is empty
-                    setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
+                    setTimeout(
+                      scanMMMMachine,
+                      60000,
+                      machine,
+                      line_number,
+                      app
+                    ); // try again in 60 second
                   } else {
                     parseString(xml.CountsResult, function (err, result) {
                       if (result == null) {
@@ -232,6 +311,7 @@ const scanMMMMachine = (machine, line_number, app) => {
                         ); // try again in 60 second
                       } else {
                         //console.log(result);
+                        console.log("321", lineId, lehrTime, lineSpeed);
                         let insertQuery;
                         let sensorArray = [];
                         //building the insert statement and array
@@ -240,17 +320,15 @@ const scanMMMMachine = (machine, line_number, app) => {
                           let insertQuery1 =
                             'INSERT INTO "' +
                             machine_and_line +
-                            '" (id,machine_id, inspected, rejected, mold ,';
+                            '" (id,machine_id, inspected, rejected, linespeed, mold ,';
                           //start building the values string
                           let insertQuery2 = " VALUES ";
                           let sensorIndex = 1;
 
                           result.Mold.map((mold, moldIndex) => {
-                            insertQuery2 += " (uuid_generate_v4(),";
-                            for (var i = 0; i < 4; i++) {
-                              insertQuery2 += "$" + sensorIndex + ",";
-                              sensorIndex++;
-                            }
+                            insertQuery2 +=
+                              " (uuid_generate_v4(),$1,$2,$3,$4,$5,";
+
                             machine.sensors.sensors.map((sensor, index) => {
                               //loop through all the sensors
                               for (var i = 0; i < sensor.counter.length; i++) {
@@ -290,12 +368,12 @@ const scanMMMMachine = (machine, line_number, app) => {
                             // "_" +
                             // machine.machine_line.replace(/[^A-Z0-9]/gi, "") +
                             machine_and_line +
-                            '" (id,machine_id, inspected, rejected, mold ,';
+                            '" (id,machine_id, inspected, rejected,linespeed, mold ,';
 
                           //start building the values string
                           let insertQuery2 =
-                            " VALUES (uuid_generate_v4(),$1,$2,$3, $4, ";
-                          let sensorIndex = 5; // sensor array offset
+                            " VALUES (uuid_generate_v4(),$1,$2,$3,$4, $5, ";
+                          let sensorIndex = 6; // sensor array offset
 
                           machine.sensors.sensors.map((sensor, index) => {
                             //loop through all the sensors
@@ -303,7 +381,7 @@ const scanMMMMachine = (machine, line_number, app) => {
                               insertQuery1 += sensor.id + ",";
                               insertQuery2 += "$" + sensorIndex + " ,";
 
-                              sensorArray[sensorIndex - 5] = s2n(
+                              sensorArray[sensorIndex - 6] = s2n(
                                 // insert value of counter to sensor array
                                 result.Mold.Machine[0].Sensor[index]["Rejects"]
                               );
@@ -315,7 +393,7 @@ const scanMMMMachine = (machine, line_number, app) => {
                                   sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
                                 insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
 
-                                sensorArray[sensorIndex - 5] = s2n(
+                                sensorArray[sensorIndex - 6] = s2n(
                                   // insert value of counter to sensor array
                                   result.Mold.Machine[0].Sensor[index].Counter[
                                     i
@@ -334,10 +412,12 @@ const scanMMMMachine = (machine, line_number, app) => {
                           //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         }
                         //START GATHERING THE INSERT VALUES
+
                         let values = [
                           machine.id,
                           s2n(result.Mold.Machine[0].Inspected),
                           s2n(result.Mold.Machine[0].Rejects),
+                          s2n(lineSpeed),
                           s2n(result.Mold.$.id),
                           ...sensorArray,
                         ];
@@ -373,7 +453,9 @@ const scanMMMMachine = (machine, line_number, app) => {
     console.log(machine_and_line + " not added!");
     return machine_and_line + " not added!";
   }
-};
+
+  //each machine
+}
 
 function removeMMMMachine(machine, line_number) {
   //console.log(1);
@@ -390,12 +472,12 @@ function removeMMMMachine(machine, line_number) {
   }
 }
 
-const updateMMMMachine = function (machine, line_number, scanTime) {
+function updateMMMMachine(machine, line_number, scanTime) {
   let machine_and_line =
     machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
   manager.update(machine_and_line, scanTime);
-};
+}
 
 exports.updateMMMMachine = updateMMMMachine;
 exports.removeMMMMachine = removeMMMMachine;
-exports.scanMachine = scanMMMMachine;
+exports.scanMMMMachine = scanMMMMachine;

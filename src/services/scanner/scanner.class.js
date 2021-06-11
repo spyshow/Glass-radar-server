@@ -19,25 +19,68 @@ exports.Scanner = class Scanner {
 
   // start scanning for all the machines
   async find(params) {
+    const lines = this.app.service("lines");
     pool.query("SELECT * FROM machines").then((res) => {
       let result = "";
-      res.rows.map((machine) => {
-        result += scanMMMMachine(machine);
-      });
+      res.rows
+        .map((machine) => {
+          result += lines.get(machine.lineId).then((line) => {
+            const lehrTime = this.app
+              .service("jobs")
+              .find({
+                query: {
+                  active: true,
+                  line: line.line_number,
+                },
+              })
+              .then((job) => {
+                return job.lehr_time;
+              });
+            console.log("scanner:39:", lehrTime);
+            return scanMMMMachine(
+              machine,
+              line.line_number,
+              this.app,
+              machine.lineId,
+              lehrTime
+            );
+          });
+        })
+        .catch((error) => console.log(error));
     });
+
     return "done find";
   }
 
   // start scanning for a specific machines
   async get(id, params) {
     const lines = this.app.service("lines");
+
     pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [id] })
       .then((res) => {
         let machine = res.rows[0];
+
         lines.get(machine.lineId).then((line) => {
+          const lehrTime = this.app
+            .service("jobs")
+            .find({
+              query: {
+                active: true,
+                line: line.line_number,
+              },
+            })
+            .then((job) => {
+              return job.lehr_time;
+            });
           console.log(res);
-          scanMMMMachine(machine, line.line_number, this.app);
+          scanMMMMachine(
+            machine,
+            line.line_number,
+            this.app,
+            machine.lineId,
+            lehrTime
+          );
         });
         return "scanning";
       })
@@ -46,21 +89,34 @@ exports.Scanner = class Scanner {
   // in use right now
   async create(data, params) {
     const lines = this.app.service("lines");
+
     await pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
-        lines.get(machine.lineId).then((line) => {
+        lines.get(machine.lineId).then(async (line) => {
+          
           switch (machine.type) {
             case "MX4":
             case "MULTI4":
             case "MCAL4":
-              scanMMMMachine(machine, line.line_number, this.app);
+              scanMMMMachine(
+                machine,
+                line.line_number,
+                this.app,
+                machine.lineId,
+              );
               break;
             case "LI":
             case "VI":
             case "PALLETIZER":
-              scanSensor(machine, line.line_number, this.app);
+              scanSensor(
+                machine,
+                line.line_number,
+                this.app,
+                machine.lineId,
+                lehrTime
+              );
           }
         });
       })
