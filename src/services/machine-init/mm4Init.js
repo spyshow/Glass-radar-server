@@ -7,12 +7,10 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
     let counters = [];
     let sensorName = sensor.$.id;
     let counter = {};
-    console.log("counter", sensor.Counter);
     if (Array.isArray(sensor.Counter)) {
       console.log("its array", Array.isArray(sensor.Counter));
       counter = sensor.Counter;
       for (let i = 0; i < counter.length; i++) {
-        console.log(sensor);
         let counterId = sensor.Counter[i]["$"].id.replace(/[^A-Z0-9]/gi, "");
         insertQuery += sensorName + "_" + counterId + " integer,";
 
@@ -24,7 +22,6 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
       });
     } else if (sensor.Counter === undefined) {
       counter = Object.keys(sensor);
-      console.log(counter);
 
       let counterId = sensor["$"].id.replace(/[^A-Z0-9]/gi, "");
       insertQuery += sensorName + " integer,";
@@ -37,9 +34,7 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
       });
     } else {
       counter = Object.keys(sensor.Counter);
-      console.log(counter);
       for (let i = 0; i < counter.length; i++) {
-        console.log(sensor);
         let counterId = sensor.Counter[i]["$"].id.replace(/[^A-Z0-9]/gi, "");
         insertQuery += sensorName + "_" + counterId + " integer,";
 
@@ -67,8 +62,8 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
                       WHERE id=$2;`;
   //console.log(id, JSON.stringify(sensorObj, null, 4));
   const updateValues = [sensorObj, machine_id];
-  console.log(updateValues);
-  console.log(insertQuery);
+  // console.log(updateValues);
+  // console.log(insertQuery);
   pool
     .query(insertQuery)
     .then(() => {
