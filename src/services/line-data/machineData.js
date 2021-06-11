@@ -11,13 +11,7 @@ const pool = require("./../../db");
           more than  3 days (every 1 day)
 */
 
-const machineData = async function (
-  machine,
-  params,
-  lineSpeed,
-  scanTime,
-  color
-) {
+const machineData = async function (machine, params, color) {
   const colorList = ["#9E87FF", "#73DDFF", "#fe9a8b", "#F56948", "#9E87FF"];
   let oldResult, newResult;
   let option = {
@@ -181,10 +175,10 @@ const machineData = async function (
     case "MX4":
     case "MULTI4":
     case "MCAL4":
-      column = "inspected , rejected";
+      column = "linespeed, inspected , rejected";
       break;
     default:
-      column = "inspected";
+      column = "linespeed , inspected";
       break;
   }
   let machineAndLine = `${machine.machine_name}_${machine["line.line_number"]}`;
@@ -203,6 +197,7 @@ const machineData = async function (
     .then((res) => {
       let goodBottles, percentage;
       option.id = machine.machine_name;
+      option.type = machine.type;
 
       //to calculate the passed through (good bottles)
       switch (machine.type) {
@@ -211,23 +206,18 @@ const machineData = async function (
         case "MCAL4":
           option.series[0].data = res.rows.map((row) => {
             goodBottles = row.inspected - row.rejected;
-            percentage = (goodBottles * 100) / (lineSpeed * scanTime);
-            console.log(
-              row.inspected,
-              row.rejected,
-              goodBottles,
-              lineSpeed,
-              scanTime,
-              percentage
-            );
-            return [row.created_at, percentage];
+            percentage =
+              (goodBottles * 100) / (row.linespeed * machine.scantime);
+
+            return [row.created_at, percentage.toPrecision(2)];
           });
           break;
         default:
           option.series[0].data = res.rows.map((row) => {
             goodBottles = row.inspected;
-            percentage = (goodBottles * 100) / (lineSpeed * scanTime);
-            return [row.created_at, percentage];
+            percentage =
+              (goodBottles * 100) / (row.lineSpeed * machine.scantime);
+            return [row.created_at, percentage.toPrecision(2)];
           });
           break;
       }
