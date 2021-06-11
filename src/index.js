@@ -9,6 +9,9 @@ const manager = new CronJobManager();
 process.on("unhandledRejection", (reason, p) =>
   logger.error("Unhandled Rejection at: Promise ", p, reason)
 );
+process.on("unhandledRejection", (up) => {
+  console.log(up);
+});
 
 server.on("listening", () => {
   //start gathering lines speed to linespeed table
