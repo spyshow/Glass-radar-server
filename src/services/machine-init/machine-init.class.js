@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable quotes */
 const soap = require("soap");
 const parseString = require("xml2js").parseString;
@@ -53,20 +54,19 @@ exports.MachineInit = class MachineInit {
 
   async create(data, params) {
     const lineData = await this.app.service("lines").get(data.lineId);
-    console.log(lineData.line_number);
+    console.log(data);
     let machine_and_line =
       data.machine_name + "_" + lineData.line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
     function learnMMMSensors(url, machine_name, id) {
       let insertQuery =
         'CREATE TABLE IF NOT EXISTS "' +
         machine_name +
-        '" ( id uuid NOT NULL, machine_id integer, inspected integer, rejected integer, mold integer, ';
+        '" ( id uuid NOT NULL, machine_id integer, inspected integer, rejected integer,linespeed integer, mold integer, ';
       console.log(url);
       soap.createClient(
         url,
         //"http://192.168.0.191/webservice/cwebservice.asmx?wsdl",
         function (err, client) {
-          if (err) throw err;
           if (typeof client === "undefined") {
             console.log("waiting Client ... ");
             setTimeout(learnMMMSensors, 60000, url, machine_name, id);
@@ -90,6 +90,7 @@ exports.MachineInit = class MachineInit {
                     console.log("waiting result ... ");
                     setTimeout(learnMMMSensors, 60000, url, machine_name, id);
                   } else {
+                    console.log("multi");
                     mm4Init(result, insertQuery, machine_name, id, pool);
                   }
                 });
@@ -99,29 +100,34 @@ exports.MachineInit = class MachineInit {
         }
       );
     }
-    if (
-      data.type !== "MX4" ||
-      data.type !== "MCAL4" ||
-      data.type !== "MULTI4"
-    ) {
-      let insertQuery =
-        'CREATE TABLE IF NOT EXISTS "' +
-        machine_and_line +
-        '" ( id uuid NOT NULL, machine_id integer, inspected integer, created_at timestamp with time zone,updated_at timestamp with time zone, ' +
-        "CONSTRAINT " +
-        machine_and_line +
-        "_pkey PRIMARY KEY (id), " +
-        "CONSTRAINT " +
-        machine_and_line +
-        "_machine_id_fkey FOREIGN KEY (machine_id) " +
-        "REFERENCES public.machines (id) MATCH SIMPLE " +
-        "ON UPDATE CASCADE " +
-        "ON DELETE CASCADE);";
-      console.log(insertQuery);
-      pool.query(insertQuery).catch((error) => console.log(error));
-    } else {
-      learnMMMSensors(data.url, machine_and_line, data.id);
+    console.log(data.type !== "MCAL4");
+    let insertQuery =
+      'CREATE TABLE IF NOT EXISTS "' +
+      machine_and_line +
+      '" ( id uuid NOT NULL, machine_id integer, inspected integer, linespeed integer, created_at timestamp with time zone,updated_at timestamp with time zone, ' +
+      "CONSTRAINT " +
+      machine_and_line +
+      "_pkey PRIMARY KEY (id), " +
+      "CONSTRAINT " +
+      machine_and_line +
+      "_machine_id_fkey FOREIGN KEY (machine_id) " +
+      "REFERENCES public.machines (id) MATCH SIMPLE " +
+      "ON UPDATE CASCADE " +
+      "ON DELETE CASCADE);";
+    switch (data.type) {
+      case "MX4":
+      case "MCAL4":
+      case "MULTI4":
+        learnMMMSensors(data.url, machine_and_line, data.id);
+        break;
+      default:
+        console.log("not mmm");
+
+        console.log(insertQuery);
+        pool.query(insertQuery).catch((error) => console.log(error));
+        break;
     }
+
     return "done";
   }
 

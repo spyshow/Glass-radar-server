@@ -7,7 +7,7 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
     let counters = [];
     let sensorName = sensor.$.id;
     let counter = {};
-    console.log(sensor.$.id);
+    console.log("counter", sensor.Counter);
     if (Array.isArray(sensor.Counter)) {
       console.log("its array", Array.isArray(sensor.Counter));
       counter = sensor.Counter;
