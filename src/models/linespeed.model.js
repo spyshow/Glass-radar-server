@@ -22,8 +22,8 @@ module.exports = function (app) {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      createdAt: { type: Date, default: moment() },
-      updatedAt: { type: Date, default: moment() },
+      createdAt: { type: DataTypes.DATE, default: moment() },
+      updatedAt: { type: DataTypes.DATE, default: moment() },
     },
     {
       hooks: {
