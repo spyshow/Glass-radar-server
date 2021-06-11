@@ -30,8 +30,6 @@ exports.LineData = class LineData {
       })
       .then(async ({ data }) => {
         line_number = data[0]["line.line_number"];
-        console.log(data[0]);
-        let scanTime = data[0].scantime;
         let lineSpeed = await this.app
           .service("jobs")
           .find({
@@ -45,7 +43,7 @@ exports.LineData = class LineData {
           });
         for (let machine of data) {
           options.push(
-            await machineData(machine, params, lineSpeed, scanTime, "green")
+            await machineData(machine, params, lineSpeed, "green")
           );
         }
         return options;
