@@ -34,13 +34,35 @@ const mmmData = async function (params, colors) {
         type: "shadow",
       },
     },
-    dataZoom: {
-      type: "slider",
-      show: true,
-      start: 0,
-      xAxisIndex: 0,
-    },
-
+    // dataZoom: {
+    //   type: "slider",
+    //   show: true,
+    //   start: 0,
+    //   xAxisIndex: 0,
+    // },
+    dataZoom: [
+      {
+        show: true,
+        type: "slider",
+        start: 0,
+        end: 100,
+        filterMode: "filter",
+      },
+      {
+        type: "inside",
+        start: 0,
+        end: 100,
+      },
+      {
+        show: false,
+        yAxisIndex: 0,
+        filterMode: "empty",
+        width: 30,
+        height: "80%",
+        showDataShadow: false,
+        left: "93%",
+      },
+    ],
     legend: {
       top: 20,
       right: 150,
