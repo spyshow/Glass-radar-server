@@ -60,7 +60,18 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      async (context) => {
+        // to add line.id and line.line_number to the returned added row after the creation
+        const line = await context.app
+          .service("lines")
+          .get(context.arguments[0].lineId);
+        context.result["line.id"] = line.id;
+        context.result["line.line_number"] = line.line_number;
+
+        return context;
+      },
+    ],
     update: [],
     patch: [],
     remove: [],
