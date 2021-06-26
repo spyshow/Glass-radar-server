@@ -38,10 +38,12 @@ exports.MachineCard = class MachineCard {
         trigger: "axis",
         axisPointer: {
           type: "cross",
+          color: colors[params.query.index],
           label: {
             backgroundColor: "#6a7985",
           },
         },
+        textStyle: {},
       },
       grid: {
         top: "3%",
@@ -105,10 +107,30 @@ exports.MachineCard = class MachineCard {
             lineStyle: {
               width: 0,
             },
+            itemStyle: {
+              color: colors[params.query.index],
+            },
             showSymbol: false,
             areaStyle: {
               opacity: 0.8,
-              color: colors[params.query.index],
+              color: {
+                type: "linear",
+                x: 0,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#FFFFFF", // color at 0% position
+                  },
+                  {
+                    offset: 1,
+                    color: colors[params.query.index], // color at 100% position
+                  },
+                ],
+                global: false, // false by default
+              },
               // color: echarts.graphic.LinearGradient(0, 0, 0, 1, [
               //   {
               //     offset: 0,
