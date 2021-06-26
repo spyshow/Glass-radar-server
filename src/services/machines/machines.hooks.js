@@ -74,7 +74,23 @@ module.exports = {
     ],
     update: [],
     patch: [],
-    remove: [],
+    remove: [
+      async (context) => {
+        const sequelize = context.app.get("sequelizeClient");
+        const queryInterface = sequelize.getQueryInterface();
+        console.log(context);
+        await queryInterface
+          .dropTable(
+            `${context.result["machine_name"]}_${context.result["line.line_number"]}`
+          )
+          .then(() => {
+            console.log("done deleteing table");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+    ],
   },
 
   error: {
