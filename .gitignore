@@ -110,3 +110,6 @@ $RECYCLE.BIN/
 lib/
 data/
 public/uploads
+time_interal.sql
+yarn.lock
+yarn.lock
