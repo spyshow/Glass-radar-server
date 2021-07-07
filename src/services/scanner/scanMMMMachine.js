@@ -29,6 +29,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
   //example: MCAL_M22
   let machine_and_line =
     machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
+  console.log("32: manager ", manager.exists(machine_and_line));
   if (!manager.exists(machine_and_line)) {
     manager.add(
       //we add a corn job
@@ -92,8 +93,10 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
           //call the soap API
           machine.url,
           function (err, client) {
+            if (err) console.log(err);
             if (typeof client === "undefined") {
               //if the first call for the API it will return an empty respond
+              console.log("99:undefined");
               setTimeout(
                 scanMMMMachine,
                 60000,
@@ -103,7 +106,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                 lineId
               ); // call the function again after 60 second
             } else {
-              //console.log(machine.type);
+              console.log(machine.type);
               //calling soap api
               client.Counts({}, function (err, xml) {
                 if (machine.type === "MX4") {
@@ -214,7 +217,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           }
                         });
 
-                        insertQuery2 += " NOW(), NOW()),";
+                        insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)),";
                       });
                       insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
                       insertQuery = insertQuery1 + insertQuery2.slice(0, -1);
@@ -261,7 +264,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         }
                       });
                       insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
-                      insertQuery2 += " NOW(), NOW()) RETURNING *;";
+                      insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;";
                       insertQuery = insertQuery1 + insertQuery2;
                       //DONE BUILDING INSERT QUERY
 
@@ -354,7 +357,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                               }
                             });
 
-                            insertQuery2 += " NOW(), NOW()),";
+                            insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp), DATE_TRUNC('minute', NOW()::timestamp)),";
                           });
                           insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
                           insertQuery =
@@ -405,7 +408,8 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                             }
                           });
                           insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
-                          insertQuery2 += " NOW(), NOW()) RETURNING *;";
+                          insertQuery2 +=
+                            " DATE_TRUNC('minute', NOW()::timestamp), DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;";
                           insertQuery = insertQuery1 + insertQuery2;
                           //DONE BUILDING INSERT QUERY
 

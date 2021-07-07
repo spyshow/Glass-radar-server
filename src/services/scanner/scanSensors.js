@@ -5,10 +5,10 @@ const manager = new CronJobManager();
 const pool = require("../../db");
 const axios = require("axios").default;
 
-const scanSensor =async (machine, line_number, app,lineId,lehrTime) => {
+const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
   console.log("!!" + machine.scantime);
   const mahcnieData = app.service("machine-data");
-  let lineSpeed ;
+  let lineSpeed;
   await app
     .service("linespeed")
     .find({
@@ -49,7 +49,7 @@ const scanSensor =async (machine, line_number, app,lineId,lehrTime) => {
           .then((response) => {
             console.log(response);
             //building Insert query
-            let insertQuery = `INSERT INTO "${machine_and_line}" (id,machine_id,linespeed inspected ,created_at, updated_at)  VALUES (uuid_generate_v4(),${machine.id},${lineSpeed},${response.data.count},NOW(), NOW()) RETURNING *;`;
+            let insertQuery = `INSERT INTO "${machine_and_line}" (id,machine_id,linespeed inspected ,created_at, updated_at)  VALUES (uuid_generate_v4(),${machine.id},${lineSpeed},${response.data.count}, DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;`;
             console.log(insertQuery);
             pool.query(insertQuery).then((res) => {
               mahcnieData.emit("created", {
