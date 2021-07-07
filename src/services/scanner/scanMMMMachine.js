@@ -217,7 +217,8 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           }
                         });
 
-                        insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)),";
+                        insertQuery2 +=
+                          "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)),";
                       });
                       insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
                       insertQuery = insertQuery1 + insertQuery2.slice(0, -1);
@@ -264,7 +265,8 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         }
                       });
                       insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
-                      insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;";
+                      insertQuery2 +=
+                        "  DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;";
                       insertQuery = insertQuery1 + insertQuery2;
                       //DONE BUILDING INSERT QUERY
 
@@ -357,7 +359,8 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                               }
                             });
 
-                            insertQuery2 += "  DATE_TRUNC('minute', NOW()::timestamp), DATE_TRUNC('minute', NOW()::timestamp)),";
+                            insertQuery2 +=
+                              "  DATE_TRUNC('minute', NOW()::timestamp), DATE_TRUNC('minute', NOW()::timestamp)),";
                           });
                           insertQuery1 += "created_at, updated_at) "; // finishing the insert statement
                           insertQuery =
