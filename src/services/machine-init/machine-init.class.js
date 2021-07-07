@@ -7,7 +7,51 @@ const { mx4Init } = require("./mx4Init");
 const { mm4Init } = require("./mm4Init");
 // const feathers = require("@feathersjs/feathers");
 // const lines = app.service("lines");
+function learnMMMSensors(url, machine_name, id, data) {
+  let insertQuery =
+    'CREATE TABLE IF NOT EXISTS "' +
+    machine_name +
+    '" ( id uuid NOT NULL, machine_id integer, inspected integer, rejected integer,linespeed integer, mold integer, ';
+  console.log(url);
+  soap.createClient(
+    url,
+    //"http://192.168.0.191/webservice/cwebservice.asmx?wsdl",
+    function (err, client) {
+      if (err) console.log("20:", err);
+      console.log(client);
+      if (typeof client === "undefined" || client === null) {
+        console.log("waiting Client ... ");
+        setTimeout(learnMMMSensors, 60000, url, machine_name, id, data);
+      } else {
+        console.log("S", data.type);
+        //calling soap api
 
+        client.Counts({}, function (err, xml) {
+          //check if machine type is Mcal, Multi or MX4
+          if (data.type === "MX4") {
+            if (xml.CountsResult === null) {
+              console.log("waiting result ... ");
+              setTimeout(learnMMMSensors, 60000, url, machine_name, id, data);
+            } else {
+              mx4Init(xml, insertQuery, machine_name, id, pool);
+            }
+          } else {
+            parseString(xml.CountsResult, function (err, result) {
+              console.log(xml);
+              if (result === null) {
+                console.log("waiting result ... ");
+                setTimeout(learnMMMSensors, 60000, url, machine_name, id, data);
+              } else {
+                console.log("multi");
+                mm4Init(result, insertQuery, machine_name, id, pool);
+              }
+            });
+          }
+        });
+      }
+    }
+  );
+}
 /* eslint-disable no-unused-vars */
 exports.MachineInit = class MachineInit {
   constructor(options) {
@@ -57,49 +101,7 @@ exports.MachineInit = class MachineInit {
     console.log(data);
     let machine_and_line =
       data.machine_name + "_" + lineData.line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
-    function learnMMMSensors(url, machine_name, id) {
-      let insertQuery =
-        'CREATE TABLE IF NOT EXISTS "' +
-        machine_name +
-        '" ( id uuid NOT NULL, machine_id integer, inspected integer, rejected integer,linespeed integer, mold integer, ';
-      console.log(url);
-      soap.createClient(
-        url,
-        //"http://192.168.0.191/webservice/cwebservice.asmx?wsdl",
-        function (err, client) {
-          if (typeof client === "undefined") {
-            console.log("waiting Client ... ");
-            setTimeout(learnMMMSensors, 60000, url, machine_name, id);
-          } else {
-            console.log("S", data.type);
-            //calling soap api
 
-            client.Counts({}, function (err, xml) {
-              //check if machine type is Mcal, Multi or MX4
-              if (data.type === "MX4") {
-                if (xml.CountsResult === null) {
-                  console.log("waiting result ... ");
-                  setTimeout(learnMMMSensors, 60000, url, machine_name, id);
-                } else {
-                  mx4Init(xml, insertQuery, machine_name, id, pool);
-                }
-              } else {
-                parseString(xml.CountsResult, function (err, result) {
-                  console.log(xml);
-                  if (result === null) {
-                    console.log("waiting result ... ");
-                    setTimeout(learnMMMSensors, 60000, url, machine_name, id);
-                  } else {
-                    console.log("multi");
-                    mm4Init(result, insertQuery, machine_name, id, pool);
-                  }
-                });
-              }
-            });
-          }
-        }
-      );
-    }
     console.log(data.type !== "MCAL4");
     let insertQuery =
       'CREATE TABLE IF NOT EXISTS "' +
@@ -118,11 +120,12 @@ exports.MachineInit = class MachineInit {
       case "MX4":
       case "MCAL4":
       case "MULTI4":
-        learnMMMSensors(data.url, machine_and_line, data.id);
+        console.log("mmm");
+        console.log(insertQuery);
+        learnMMMSensors(data.url, machine_and_line, data.id, data);
         break;
       default:
         console.log("not mmm");
-
         console.log(insertQuery);
         pool.query(insertQuery).catch((error) => console.log(error));
         break;
