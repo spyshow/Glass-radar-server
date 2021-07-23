@@ -162,8 +162,7 @@ const machineData = async function (machine, params, color) {
   };
   let column = "";
   let machineAndLine = `${machine.machine_name}_${machine["line.line_number"]}`;
-  let interval = timeRange(params.query.oldStartDate, params.query.oldEndDate);
-
+  let interval = timeRange(params.query.newStartDate, params.query.newEndDate);
   switch (machine.type) {
     case "MX4":
     case "MULTI4":
