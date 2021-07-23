@@ -18,7 +18,7 @@
       "audience": "http://localhost:3030/",
       "issuer": "feathers",
       "algorithm": "HS256",
-      "expiresIn": "1d"
+      "expiresIn": "6d"
     },
     "local": {
       "usernameField": "email",
