@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 const { machineData } = require("./machineData");
