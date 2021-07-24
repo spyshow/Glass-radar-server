@@ -6,7 +6,6 @@ const { round } = require("./../../utils/round");
 const { timeRange } = require("./../../utils/timeRange");
 
 const machineData = async function (machine, params, color) {
-  const colorList = ["#9E87FF", "#73DDFF", "#fe9a8b", "#F56948", "#9E87FF"];
   let oldResult, newResult;
   let option = {
     tooltip: {
@@ -154,8 +153,8 @@ const machineData = async function (machine, params, color) {
           shadowOffsetY: 20,
         },
         itemStyle: {
-          color: colorList[0],
-          borderColor: colorList[0],
+          color: color,
+          borderColor: color,
         },
       },
     ],

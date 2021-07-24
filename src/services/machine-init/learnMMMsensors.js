@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable linebreak-style */
 const soap = require("soap");
 const parseString = require("xml2js").parseString;

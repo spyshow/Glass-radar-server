@@ -95,7 +95,21 @@ exports.Scanner = class Scanner {
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then(async (line) => {
-          
+          const lehrTime = this.app
+            .service("jobs")
+            .find({
+              query: {
+                active: true,
+                line: line.line_number,
+              },
+            })
+            .then((job) => {
+              return job.lehr_time;
+            })
+            .catch((err) => {
+              console.log("lehrtime: ", err);
+            });
+
           switch (machine.type) {
             case "MX4":
             case "MULTI4":
@@ -104,7 +118,7 @@ exports.Scanner = class Scanner {
                 machine,
                 line.line_number,
                 this.app,
-                machine.lineId,
+                machine.lineId
               );
               break;
             case "LI":

@@ -128,6 +128,8 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     let sensorArray = [];
                     //building the insert statement and array
                     //console.log(machine_and_line, result.Mold);
+
+                    //if machine is MX4
                     if (
                       Array.isArray(result.Mold) &&
                       result.attributes.Id === "MX" &&
@@ -135,39 +137,55 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     ) {
                       //TODO:
                       //if no mold number reader is installed
-                      console.log("135", lineId, lehrTime, lineSpeed);
+                      console.log("14o", lineId, lehrTime, lineSpeed);
                       //building Insert query
                       let insertQuery1 =
                         'INSERT INTO "' +
                         machine_and_line +
-                        '" (id,machine_id, inspected, rejected,linespeed, mold ,';
+                        '" (id,machine_id, inspected, rejected,machinepct,linepct,linespeed, mold ,';
                       //start building the values string
                       let insertQuery2 = " VALUES ";
-                      let sensorIndex = 1;
 
                       result.Mold.map((mold, moldIndex) => {
                         insertQuery2 += " (uuid_generate_v4(),";
-                        for (var i = 0; i < 5; i++) {
-                          switch (i) {
-                            case 0:
+                        for (
+                          var sensorIndex = 1;
+                          sensorIndex < 8;
+                          sensorIndex++
+                        ) {
+                          switch (sensorIndex) {
+                            case 1:
                               sensorArray[sensorIndex - 1] = machine.id;
 
                               break;
-                            case 1:
+                            case 2:
                               sensorArray[sensorIndex - 1] = s2n(
                                 mold.Inspected
                               );
 
                               break;
-                            case 2:
+                            case 3:
                               sensorArray[sensorIndex - 1] = s2n(mold.Rejects);
                               break;
-                            case 3:
+
+                            case 4:
+                              sensorArray[sensorIndex - 1] = s2n(
+                                ((mold.Inspected - mold.Rejects) * 100) /
+                                  mold.Inspected
+                              );
+                              break;
+                            case 5:
+                              sensorArray[sensorIndex - 1] = s2n(
+                                (100 * (mold.Inspected - mold.Rejects)) /
+                                  (lineSpeed * machine.scantime)
+                              );
+                              break;
+                            case 6:
                               console.log("119:linespeed ", lineSpeed);
                               sensorArray[sensorIndex - 1] = s2n(lineSpeed);
 
                               break;
-                            case 4:
+                            case 7:
                               sensorArray[sensorIndex - 1] = s2n(
                                 mold.attributes.id
                               );
@@ -177,7 +195,6 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           }
 
                           insertQuery2 += "$" + sensorIndex + ",";
-                          sensorIndex++;
                         }
 
                         machine.sensors.sensors.map((sensor) => {
@@ -225,8 +242,10 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                       // console.table(sensorArray);
                       // console.log(insertQuery);
                     } else {
+                      //TODO to be checked online
+                      //if machine has no mold number reader
                       //building Insert query
-                      console.log("234", lineId, lehrTime, lineSpeed);
+                      console.log("246", lineId, lehrTime, lineSpeed);
                       console.log(machine.type + " its an object");
                       let insertQuery1 =
                         'INSERT INTO "' +
@@ -234,12 +253,64 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         // "_" +
                         // machine.machine_line.replace(/[^A-Z0-9]/gi, "") +
                         machine_and_line +
-                        '" (id,machine_id, inspected, rejected,linespeed, mold ,';
+                        '" (id,machine_id, inspected, rejected,machinepct,linepct,linespeed, mold ,';
 
                       //start building the values string
-                      let insertQuery2 =
-                        " VALUES (uuid_generate_v4(),$1,$2,$3, $4, $5";
-                      let sensorIndex = 5; // sensor array offset
+                      let insertQuery2 = " VALUES ";
+                      // let insertQuery2 =
+                      //   " VALUES (uuid_generate_v4(),$1,$2,$3, $4, $5,$6,$7,";
+                      insertQuery2 += " (uuid_generate_v4(),";
+                      var sensorIndex;
+                      for (sensorIndex = 1; sensorIndex < 8; sensorIndex++) {
+                        switch (sensorIndex) {
+                          case 1:
+                            sensorArray[sensorIndex - 1] = machine.id;
+
+                            break;
+                          case 2:
+                            sensorArray[sensorIndex - 1] = s2n(
+                              result.Mold.Inspected
+                            );
+
+                            break;
+                          case 3:
+                            sensorArray[sensorIndex - 1] = s2n(
+                              result.Mold.Rejects
+                            );
+                            break;
+
+                          case 4:
+                            sensorArray[sensorIndex - 1] = s2n(
+                              ((result.Mold.Inspected - result.Mold.Rejects) *
+                                100) /
+                                result.Mold.Inspected
+                            );
+                            break;
+                          case 5:
+                            sensorArray[sensorIndex - 1] = s2n(
+                              (100 *
+                                (result.Mold.Inspected - result.Mold.Rejects)) /
+                                (lineSpeed * machine.scantime)
+                            );
+                            break;
+                          case 6:
+                            console.log("119:linespeed ", lineSpeed);
+                            sensorArray[sensorIndex - 1] = s2n(lineSpeed);
+
+                            break;
+                          case 7:
+                            sensorArray[sensorIndex - 1] = s2n(
+                              result.Mold.attributes.id
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+
+                        insertQuery2 += "$" + sensorIndex + ",";
+                      }
+
+                      // let sensorIndex = 7; // sensor array offset
                       console.log(machine.sensors);
                       machine.sensors.sensors.map((sensor, index) => {
                         //loop through all the sensors
@@ -251,11 +322,11 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
                           console.log(result);
                           if (typeof result.Mold === "undefined") {
-                            sensorArray[sensorIndex - 5] = 0;
+                            sensorArray[sensorIndex - 1] = 0;
                           } else {
-                            console.log("inside");
-                            console.log(result.Mold);
-                            sensorArray[sensorIndex - 5] = s2n(
+                            // console.log("inside");
+                            // console.log(result.Mold);
+                            sensorArray[sensorIndex - 1] = s2n(
                               // insert value of counter to sensor array
                               result.Mold.Sensor[index].Counter[i]["$"].Nb
                             );
@@ -275,7 +346,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     //START GATHERING THE INSERT VALUES
                     //DONE GATHERING THE INSERT VALUES
                     //INSERT VALUES TO DB
-                    console.log(insertQuery, sensorArray);
+                    console.log("347", insertQuery, sensorArray);
                     pool
                       .query(insertQuery, sensorArray)
                       .then((res) => {
@@ -325,14 +396,14 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           let insertQuery1 =
                             'INSERT INTO "' +
                             machine_and_line +
-                            '" (id,machine_id, inspected, rejected, linespeed, mold ,';
+                            '" (id,machine_id, inspected, rejected,machinepct,linepct, linespeed, mold ,';
                           //start building the values string
                           let insertQuery2 = " VALUES ";
                           let sensorIndex = 1;
 
                           result.Mold.map((mold, moldIndex) => {
                             insertQuery2 +=
-                              " (uuid_generate_v4(),$1,$2,$3,$4,$5,";
+                              " (uuid_generate_v4(),$1,$2,$3,$4,$5,$6,$7,";
 
                             machine.sensors.sensors.map((sensor, index) => {
                               //loop through all the sensors
@@ -374,12 +445,12 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                             // "_" +
                             // machine.machine_line.replace(/[^A-Z0-9]/gi, "") +
                             machine_and_line +
-                            '" (id,machine_id, inspected, rejected,linespeed, mold ,';
+                            '" (id,machine_id, inspected, rejected,machinepct,linepct,linespeed, mold ,';
 
                           //start building the values string
                           let insertQuery2 =
-                            " VALUES (uuid_generate_v4(),$1,$2,$3,$4, $5, ";
-                          let sensorIndex = 6; // sensor array offset
+                            " VALUES (uuid_generate_v4(),$1,$2,$3,$4, $5,$6,$7, ";
+                          let sensorIndex = 8; // sensor array offset
 
                           machine.sensors.sensors.map((sensor, index) => {
                             //loop through all the sensors
@@ -387,7 +458,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                               insertQuery1 += sensor.id + ",";
                               insertQuery2 += "$" + sensorIndex + " ,";
 
-                              sensorArray[sensorIndex - 6] = s2n(
+                              sensorArray[sensorIndex - 8] = s2n(
                                 // insert value of counter to sensor array
                                 result.Mold.Machine[0].Sensor[index]["Rejects"]
                               );
@@ -399,7 +470,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                                   sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
                                 insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
 
-                                sensorArray[sensorIndex - 6] = s2n(
+                                sensorArray[sensorIndex - 8] = s2n(
                                   // insert value of counter to sensor array
                                   result.Mold.Machine[0].Sensor[index].Counter[
                                     i
@@ -419,11 +490,30 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         }
                         //START GATHERING THE INSERT VALUES
-
+                        console.log(
+                          "result:",
+                          result.Mold.Machine[0].Inspected[0],
+                          result.Mold.Machine[0].Rejects[0],
+                          lineSpeed,
+                          machine.scantime
+                        );
                         let values = [
                           machine.id,
-                          s2n(result.Mold.Machine[0].Inspected),
-                          s2n(result.Mold.Machine[0].Rejects),
+                          s2n(result.Mold.Machine[0].Inspected[0]),
+                          s2n(result.Mold.Machine[0].Rejects[0]),
+
+                          s2n(
+                            ((result.Mold.Machine[0].Inspected[0] -
+                              result.Mold.Machine[0].Rejects[0]) *
+                              100) /
+                              result.Mold.Machine[0].Inspected[0]
+                          ),
+                          s2n(
+                            (100 *
+                              (result.Mold.Machine[0].Inspected[0] -
+                                result.Mold.Machine[0].Rejects[0])) /
+                              (lineSpeed * machine.scantime)
+                          ),
                           s2n(lineSpeed),
                           s2n(result.Mold.$.id),
                           ...sensorArray,

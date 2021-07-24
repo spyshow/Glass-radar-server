@@ -43,13 +43,20 @@ exports.LineData = class LineData {
         //     console.log("linespeed:", row);
         //     return row.data[0].speed;
         //   });
-        for (let machine of data) {
-          options.push(await machineData(machine, params, "green"));
+        const colorList = [
+          "#9E87FF",
+          "#73DDFF",
+          "#fe9a8b",
+          "#F56948",
+          "#9E87FF",
+        ];
+        for (const [index, value] of data.entries()) {
+          options.push(await machineData(value, params, colorList[index]));
         }
         return options;
       });
     return {
-      line_number,
+      id: line_number,
       options,
       text: `A new message with ID: ${id}!`,
     };
