@@ -77,18 +77,28 @@ module.exports = {
     remove: [
       async (context) => {
         const sequelize = context.app.get("sequelizeClient");
-        const queryInterface = sequelize.getQueryInterface();
-        console.log(context);
-        await queryInterface
-          .dropTable(
-            `${context.result["machine_name"]}_${context.result["line.line_number"]}`
-          )
-          .then(() => {
-            console.log("done deleteing table");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        const line = await context.app
+          .service("lines")
+          .get(context.result.lineId);
+        //const queryInterface = sequelize.getQueryInterface();
+        console.log(
+          `DROP TABLE ${context.result[
+            "machine_name"
+          ].toUpperCase()}_${line.line_number.toUpperCase()}`
+        );
+        await sequelize.query(
+          `DROP TABLE public."${context.result[
+            "machine_name"
+          ].toUpperCase()}_${line.line_number.toUpperCase()}" ;`
+        );
+        // await queryInterface
+        //   .dropTable()
+        //   .then(() => {
+        //     console.log("done deleteing table");
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
       },
     ],
   },
