@@ -5,7 +5,7 @@ const pool = require("./../../db");
 const { round } = require("./../../utils/round");
 const { timeRange } = require("./../../utils/timeRange");
 
-const machineData = async function (machine, params, color) {
+const machineData = async function (machine, params, color1, color2) {
   let oldResult, newResult;
   let option = {
     tooltip: {
@@ -139,22 +139,22 @@ const machineData = async function (machine, params, color) {
             colorStops: [
               {
                 offset: 0,
-                color: "#9effff", // color at 0% position
+                color: color1, // color at 0% position
               },
               {
                 offset: 1,
-                color: "#9E87FF", // color at 100% position
+                color: color2, // color at 100% position
               },
             ],
             global: false, // false by default
           },
-          shadowColor: "rgba(158,135,255, 0.3)",
+          shadowColor: color1,
           shadowBlur: 10,
-          shadowOffsetY: 20,
+          shadowOffsetY: 7,
         },
         itemStyle: {
-          color: color,
-          borderColor: color,
+          color: color1,
+          borderColor: color1,
         },
       },
     ],

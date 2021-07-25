@@ -51,7 +51,15 @@ exports.LineData = class LineData {
           "#9E87FF",
         ];
         for (const [index, value] of data.entries()) {
-          options.push(await machineData(value, params, colorList[index]));
+          console.log(colorList[index]);
+          options.push(
+            await machineData(
+              value,
+              params,
+              colorList[index],
+              colorList[index + 1]
+            )
+          );
         }
         return options;
       });
