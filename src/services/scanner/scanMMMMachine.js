@@ -497,23 +497,29 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           lineSpeed,
                           machine.scantime
                         );
+                        //calculate machinepct and linepct
+                        let machinepct =
+                          result.Mold.Machine[0].Inspected[0] > 0
+                            ? s2n(
+                                ((result.Mold.Machine[0].Inspected[0] -
+                                  result.Mold.Machine[0].Rejects[0]) *
+                                  100) /
+                                  result.Mold.Machine[0].Inspected[0]
+                              )
+                            : 0;
+                        let linepct = s2n(
+                          (100 *
+                            (result.Mold.Machine[0].Inspected[0] -
+                              result.Mold.Machine[0].Rejects[0])) /
+                            (lineSpeed * machine.scantime)
+                        );
+
                         let values = [
                           machine.id,
                           s2n(result.Mold.Machine[0].Inspected[0]),
                           s2n(result.Mold.Machine[0].Rejects[0]),
-
-                          s2n(
-                            ((result.Mold.Machine[0].Inspected[0] -
-                              result.Mold.Machine[0].Rejects[0]) *
-                              100) /
-                              result.Mold.Machine[0].Inspected[0]
-                          ),
-                          s2n(
-                            (100 *
-                              (result.Mold.Machine[0].Inspected[0] -
-                                result.Mold.Machine[0].Rejects[0])) /
-                              (lineSpeed * machine.scantime)
-                          ),
+                          machinepct,
+                          linepct,
                           s2n(lineSpeed),
                           s2n(result.Mold.$.id),
                           ...sensorArray,
