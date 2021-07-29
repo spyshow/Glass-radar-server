@@ -1,6 +1,10 @@
 # glass-radar-server
 
-> 
+>
+
+## important
+
+the timezone of the server and pc must be set and if daylight saving is available, it should be activated (after activating if the time is wrong it should be changed).
 
 ## About
 
@@ -13,16 +17,16 @@ Getting up and running is as easy as 1, 2, 3.
 1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
 2. Install your dependencies
 
-    ```
-    cd path/to/glass-radar-server
-    npm install
-    ```
+   ```
+   cd path/to/glass-radar-server
+   npm install
+   ```
 
 3. Start your app
 
-    ```
-    npm start
-    ```
+   ```
+   npm start
+   ```
 
 ## Testing
 
