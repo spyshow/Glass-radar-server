@@ -31,18 +31,7 @@ exports.LineData = class LineData {
       })
       .then(async ({ data }) => {
         line_number = data[0]["line.line_number"];
-        // let lineSpeed = await this.app
-        //   .service("jobs")
-        //   .find({
-        //     query: {
-        //       line: line_number,
-        //       active: true,
-        //     },
-        //   })
-        //   .then((row) => {
-        //     console.log("linespeed:", row);
-        //     return row.data[0].speed;
-        //   });
+
         const colorList = [
           "#9E87FF",
           "#73DDFF",
