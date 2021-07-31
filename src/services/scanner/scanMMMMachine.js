@@ -23,8 +23,8 @@ let s2n = (string) => {
 };
 
 async function scanMMMMachine(machine, line_number, app, lineId) {
-  const mahcnieData = app.service("machine-data");
-
+  const machineData = app.service("machine-data");
+  const lineData = app.service("line-data");
   let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
   //example: MCAL_M22
   let machine_and_line =
@@ -350,9 +350,13 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     pool
                       .query(insertQuery, sensorArray)
                       .then((res) => {
-                        mahcnieData.emit("created", {
+                        machineData.emit("created", {
                           type: "created",
                           data: res.rows[0],
+                        });
+                        lineData.emit("created", {
+                          type: "created",
+                          data: lineData.get(line_number),
                         });
                       })
                       .catch((error) => console.log("!!" + error));
@@ -532,9 +536,13 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           .query(insertQuery, values)
                           .then((res) => {
                             //console.log(res.rows);
-                            mahcnieData.emit("created", {
+                            machineData.emit("created", {
                               type: "created",
                               data: res.rows[0],
+                            });
+                            lineData.emit("created", {
+                              type: "created",
+                              data: lineData.get(line_number),
                             });
                           })
                           .catch((error) => console.log("!!" + error));
