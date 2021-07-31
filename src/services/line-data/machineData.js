@@ -5,8 +5,9 @@ const pool = require("./../../db");
 const { round } = require("./../../utils/round");
 const { timeRange } = require("./../../utils/timeRange");
 
-const machineData = async function (machine, params, color1, color2) {
+const machineD = async function (machine, params, color1, color2) {
   let oldResult, newResult;
+  let interval = timeRange(params.query.newStartDate, params.query.newEndDate);
   let option = {
     tooltip: {
       trigger: "axis",
@@ -50,13 +51,13 @@ const machineData = async function (machine, params, color1, color2) {
           show: false,
         },
         axisLabel: {
-          interval: 0,
+          interval: "auto", // interval,
           textStyle: {
             color: "#556677",
           },
           fontSize: 12,
-
           margin: 15,
+          rotate: 50,
         },
         axisPointer: {
           label: {
@@ -161,22 +162,22 @@ const machineData = async function (machine, params, color1, color2) {
   };
   let column = "";
   let machineAndLine = `${machine.machine_name}_${machine["line.line_number"]}`;
-  let interval = timeRange(params.query.newStartDate, params.query.newEndDate);
+
   switch (machine.type) {
     case "MX4":
     case "MULTI4":
     case "MCAL4":
-      column = `public."${machineAndLine}".linespeed, SUM(public."${machineAndLine}".inspected) AS inspected , SUM(public."${machineAndLine}".rejected) AS rejected`;
+      column = `public."${machineAndLine}".linepct`; //`SUM(public."${machineAndLine}".linepct)/${interval} AS linepct`;
       break;
     default:
-      column = `public."${machineAndLine}".linespeed , SUM(public."${machineAndLine}".inspected) AS inspected`;
+      column = `public."${machineAndLine}".linepct`; //`SUM(public."${machineAndLine}".linepct)/${interval} AS linepct`;
       break;
   }
   console.log(params.query);
   console.log(
     "175",
-    `SELECT ${column},
-      to_timestamp((floor((extract('epoch' from created_at) / ${
+    `SELECT ${column}
+      ,to_timestamp((floor((extract('epoch' from created_at) / ${
         interval * 60
       } )) * ${interval * 60} ))
        as interval_alias
@@ -212,16 +213,10 @@ const machineData = async function (machine, params, color1, color2) {
   await pool
     .query(
       `SELECT ${column}
-      ,to_timestamp((floor((extract('epoch' from created_at) / ${
-        interval * 60
-      } )) * ${interval * 60} ))
-       as interval_alias
+      ,created_at
        FROM public."${machineAndLine}"
-      where created_at BETWEEN '${params.query.newStartDate}' AND '${
-        params.query.newEndDate
-      }'
-      GROUP BY interval_alias, linespeed
-      order by interval_alias`
+      where created_at BETWEEN '${params.query.newStartDate}' AND '${params.query.newEndDate}'
+      order by created_at DESC`
     )
     .then((res) => {
       console.log(res.rows);
@@ -232,39 +227,42 @@ const machineData = async function (machine, params, color1, color2) {
         let oldRejected, oldinspected;
         option.id = machine.machine_name;
         option.type = machine.type;
+        option.series[0].data = res.rows.map((row) => {
+          return [row.created_at, round(row.linepct, 2)];
+        });
         //to calculate the passed through (good bottles)
-        switch (machine.type) {
-          case "MX4":
-          case "MULTI4":
-          case "MCAL4":
-            //to calculate precentages
-            oldRejected = round(
-              (res.rows[res.rows.length - 2].rejected * 100) /
-                res.rows[res.rows.length - 2].inspected,
-              2
-            );
-            oldinspected = 100 - oldRejected;
+        // switch (machine.type) {
+        //   case "MX4":
+        //   case "MULTI4":
+        //   case "MCAL4":
+        //     //to calculate precentages
+        //     oldRejected = round(
+        //       (res.rows[res.rows.length - 2].rejected * 100) /
+        //         res.rows[res.rows.length - 2].inspected,
+        //       2
+        //     );
+        //     oldinspected = 100 - oldRejected;
 
-            option.series[0].data = res.rows.map((row) => {
-              goodBottles = row.inspected - row.rejected;
-              percentage =
-                (goodBottles * 100) / (row.linespeed * machine.scantime);
-              console.log("255", goodBottles, row.linespeed, machine.scantime);
-              return [row.interval_alias, percentage.toPrecision(2)];
-            });
-            break;
-          default:
-            option.series[0].data = res.rows.map((row) => {
-              goodBottles = row.inspected;
-              percentage =
-                (goodBottles * 100) / (row.lineSpeed * machine.scantime);
-              return [row.created_at, percentage.toPrecision(2)];
-            });
-            break;
-        }
+        //     option.series[0].data = res.rows.map((row) => {
+        //       goodBottles = row.inspected - row.rejected;
+        //       percentage =
+        //         (goodBottles * 100) / (row.linespeed * machine.scantime);
+        //       console.log("255", goodBottles, row.linespeed, machine.scantime);
+        //       return [row.interval_alias, percentage.toPrecision(2)];
+        //     });
+        //     break;
+        //   default:
+        //     option.series[0].data = res.rows.map((row) => {
+        //       goodBottles = row.inspected;
+        //       percentage =
+        //         (goodBottles * 100) / (row.lineSpeed * machine.scantime);
+        //       return [row.created_at, percentage.toPrecision(2)];
+        //     });
+        //     break;
+        // }
       }
     });
   return option;
 };
 
-exports.machineData = machineData;
+exports.machineD = machineD;
