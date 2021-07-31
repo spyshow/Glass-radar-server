@@ -356,7 +356,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         });
                         lineData.emit("created", {
                           type: "created",
-                          data: lineData.get(line_number),
+                          data: lineData.get(lineId),
                         });
                       })
                       .catch((error) => console.log("!!" + error));
@@ -542,7 +542,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                             });
                             lineData.emit("created", {
                               type: "created",
-                              data: lineData.get(line_number),
+                              data: lineData.get(lineId),
                             });
                           })
                           .catch((error) => console.log("!!" + error));
