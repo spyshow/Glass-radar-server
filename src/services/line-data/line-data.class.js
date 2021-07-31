@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
-const { machineData } = require("./machineData");
+const { machineD } = require("./machineData");
 exports.LineData = class LineData {
   constructor(options) {
     this.options = options || {};
@@ -40,9 +40,9 @@ exports.LineData = class LineData {
           "#9E87FF",
         ];
         for (const [index, value] of data.entries()) {
-          console.log(colorList[index]);
+          console.log("line data params:", params);
           options.push(
-            await machineData(
+            await machineD(
               value,
               params,
               colorList[index],
