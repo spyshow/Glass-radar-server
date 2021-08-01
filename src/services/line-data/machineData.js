@@ -130,7 +130,7 @@ const machineD = async function (machine, params, color1, color2) {
         yAxisIndex: 0,
         showSymbol: false,
         lineStyle: {
-          width: 5,
+          width: 2.5,
           color: {
             type: "linear",
             x: 0,
