@@ -173,21 +173,21 @@ const machineD = async function (machine, params, color1, color2) {
       column = `public."${machineAndLine}".linepct`; //`SUM(public."${machineAndLine}".linepct)/${interval} AS linepct`;
       break;
   }
-  console.log(params.query);
-  console.log(
-    "175",
-    `SELECT ${column}
-      ,to_timestamp((floor((extract('epoch' from created_at) / ${
-        interval * 60
-      } )) * ${interval * 60} ))
-       as interval_alias
-       FROM public."${machineAndLine}"
-      where created_at BETWEEN '${params.query.newStartDate}' AND '${
-      params.query.newEndDate
-    }'
-      GROUP BY interval_alias, linespeed
-      order by interval_alias`
-  );
+  // console.log(params.query);
+  // console.log(
+  //   "175",
+  //   `SELECT ${column}
+  //     ,to_timestamp((floor((extract('epoch' from created_at) / ${
+  //       interval * 60
+  //     } )) * ${interval * 60} ))
+  //      as interval_alias
+  //      FROM public."${machineAndLine}"
+  //     where created_at BETWEEN '${params.query.newStartDate}' AND '${
+  //     params.query.newEndDate
+  //   }'
+  //     GROUP BY interval_alias, linespeed
+  //     order by interval_alias`
+  // );
   // await pool
   //   .query(
   //     `SELECT ${column}
@@ -210,16 +210,21 @@ const machineD = async function (machine, params, color1, color2) {
   //       //oldAcceptedPrecentge: oldAcceptedPrecentge,
   //     };
   //   });
+  console.log(`SELECT DISTINCT ${column}
+  ,created_at
+   FROM public."${machineAndLine}"
+  where created_at BETWEEN '${params.query.newStartDate}' AND '${params.query.newEndDate}'
+  order by created_at DESC`);
   await pool
     .query(
-      `SELECT ${column}
+      `SELECT DISTINCT ${column}
       ,created_at
        FROM public."${machineAndLine}"
       where created_at BETWEEN '${params.query.newStartDate}' AND '${params.query.newEndDate}'
       order by created_at DESC`
     )
     .then((res) => {
-      console.log(res.rows);
+      //console.log(res.rows);
       if (res.rows.length <= 0) {
         return (option.series[0].data = [0, 0]);
       } else {

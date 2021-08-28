@@ -5,13 +5,13 @@ module.exports = {
     all: [authenticate("jwt")],
     find: [
       (context) => {
-
         // Get the Sequelize instance. In the generated application via:
         const sequelize = context.app.get("sequelizeClient");
         const { machines } = sequelize.models;
         sequelize.raw = true;
         context.params.sequelize = {
           include: [{ model: machines, nested: true }],
+          order: [[machines, "sequence", "ASC"]],
         };
         Object.assign(context.params.sequelize, { raw: false });
         return context;

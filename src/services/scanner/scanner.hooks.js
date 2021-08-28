@@ -16,8 +16,12 @@ module.exports = {
     find: [],
     get: [],
     create: [
+      () => {
+        // context.app.service("machine-data").emit("create");
+        console.log("emit");
+      },
       (context) => {
-        context.app.service("machine-data").emit("create");
+        context.app.service("line-data").emit("create");
         console.log("emit");
       },
     ],

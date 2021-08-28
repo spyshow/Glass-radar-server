@@ -73,7 +73,6 @@ exports.Scanner = class Scanner {
             .then((job) => {
               return job.lehr_time;
             });
-          console.log(res);
           scanMMMMachine(
             machine,
             line.line_number,

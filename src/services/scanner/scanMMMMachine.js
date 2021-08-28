@@ -64,7 +64,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
             },
           })
           .then(async (job) => {
-            console.log("67", job, lehrTime);
+            // console.log("67", job, lehrTime);
 
             if (job.data.length < 1) {
               console.log("les than lehr time");
@@ -87,7 +87,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
               lineSpeed = job.data[0].speed;
             }
           });
-        console.log("89", lineSpeed);
+        //console.log("89", lineSpeed);
         //the function to loop in every scan time
         soap.createClient(
           //call the soap API
@@ -110,7 +110,12 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
               //calling soap api
               client.Counts({}, function (err, xml) {
                 if (machine.type === "MX4") {
-                  if (xml == null || typeof xml.CountsResult === "undefined") {
+                  if (
+                    xml == null ||
+                    typeof xml.CountsResult === "undefined" ||
+                    typeof xml.CountsResult.Root.Machine.Inspected ===
+                      "undefined" // to check if the machine returned nothing
+                  ) {
                     console.log("waiting result ... ");
                     // if the respond is empty
                     setTimeout(
@@ -127,17 +132,26 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     let insertQuery;
                     let sensorArray = [];
                     //building the insert statement and array
-                    //console.log(machine_and_line, result.Mold);
+                    //calculate the line precentage ( if below 200 is ok )
+                    console.log(
+                      result.Inspected,
+                      result.Rejects,
+                      lineSpeed,
+                      machine.scantime
+                    );
 
-                    //if machine is MX4
+                    const linepctCheck = s2n(
+                      (100 * (result.Inspected - result.Rejects)) /
+                        (lineSpeed * machine.scantime)
+                    );
+
+                    //if machine is MX4 with mold number reader installed
                     if (
                       Array.isArray(result.Mold) &&
                       result.attributes.Id === "MX" &&
                       typeof result.Mold !== "undefined"
                     ) {
-                      //TODO:
-                      //if no mold number reader is installed
-                      console.log("14o", lineId, lehrTime, lineSpeed);
+                      //console.log("14o", lineId, lehrTime, lineSpeed);
                       //building Insert query
                       let insertQuery1 =
                         'INSERT INTO "' +
@@ -145,43 +159,42 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         '" (id,machine_id, inspected, rejected,machinepct,linepct,linespeed, mold ,';
                       //start building the values string
                       let insertQuery2 = " VALUES ";
-
+                      let sensorIndex = 1;
+                      //console.log(result);
                       result.Mold.map((mold, moldIndex) => {
                         insertQuery2 += " (uuid_generate_v4(),";
-                        for (
-                          var sensorIndex = 1;
-                          sensorIndex < 8;
-                          sensorIndex++
-                        ) {
-                          switch (sensorIndex) {
+                        for (let i = 1; i < 8; i++) {
+                          switch (i) {
                             case 1:
                               sensorArray[sensorIndex - 1] = machine.id;
 
                               break;
                             case 2:
                               sensorArray[sensorIndex - 1] = s2n(
-                                mold.Inspected
+                                result.Inspected
                               );
 
                               break;
                             case 3:
-                              sensorArray[sensorIndex - 1] = s2n(mold.Rejects);
+                              sensorArray[sensorIndex - 1] = s2n(
+                                result.Rejects
+                              );
                               break;
 
                             case 4:
                               sensorArray[sensorIndex - 1] = s2n(
-                                ((mold.Inspected - mold.Rejects) * 100) /
-                                  mold.Inspected
+                                ((result.Inspected - result.Rejects) * 100) /
+                                  result.Inspected
                               );
                               break;
                             case 5:
                               sensorArray[sensorIndex - 1] = s2n(
-                                (100 * (mold.Inspected - mold.Rejects)) /
+                                (100 * (result.Inspected - result.Rejects)) /
                                   (lineSpeed * machine.scantime)
                               );
                               break;
                             case 6:
-                              console.log("119:linespeed ", lineSpeed);
+                              //console.log("119:linespeed ", lineSpeed);
                               sensorArray[sensorIndex - 1] = s2n(lineSpeed);
 
                               break;
@@ -195,12 +208,17 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           }
 
                           insertQuery2 += "$" + sensorIndex + ",";
+                          sensorIndex++; // increase the index by 1
                         }
 
                         machine.sensors.sensors.map((sensor) => {
                           let rejects;
                           //loop through all the sensors
-
+                          // console.log(
+                          //   "193",
+                          //   sensor.counter.length,
+                          //   mold.Sensor.length
+                          // );
                           //here is error
                           for (var i = 1; i < sensor.counter.length + 1; i++) {
                             for (var l = 0; l < mold.Sensor.length; l++) {
@@ -227,7 +245,6 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                             // console.log(
                             //   sensorIndex,
                             //   rejects,
-                            //   sensorIndex - 1 * i,
                             //   sensorArray[sensorIndex - 1]
                             // );
                             sensorIndex++; // increase the index by 1
@@ -245,8 +262,9 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                       //TODO to be checked online
                       //if machine has no mold number reader
                       //building Insert query
-                      console.log("246", lineId, lehrTime, lineSpeed);
-                      console.log(machine.type + " its an object");
+                      // console.log("246", lineId, lehrTime, lineSpeed);
+                      // console.log(machine.type + " its an object");
+                      // console.log(result);
                       let insertQuery1 =
                         'INSERT INTO "' +
                         // result.Mold.Machine[0].$.id +
@@ -268,33 +286,24 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
 
                             break;
                           case 2:
-                            sensorArray[sensorIndex - 1] = s2n(
-                              result.Mold.Inspected
-                            );
+                            sensorArray[sensorIndex - 1] = 0;
 
                             break;
                           case 3:
-                            sensorArray[sensorIndex - 1] = s2n(
-                              result.Mold.Rejects
-                            );
+                            sensorArray[sensorIndex - 1] = s2n(result.Rejects);
                             break;
 
                           case 4:
                             sensorArray[sensorIndex - 1] = s2n(
-                              ((result.Mold.Inspected - result.Mold.Rejects) *
-                                100) /
-                                result.Mold.Inspected
+                              ((result.Inspected - result.Rejects) * 100) /
+                                result.Inspected
                             );
                             break;
                           case 5:
-                            sensorArray[sensorIndex - 1] = s2n(
-                              (100 *
-                                (result.Mold.Inspected - result.Mold.Rejects)) /
-                                (lineSpeed * machine.scantime)
-                            );
+                            sensorArray[sensorIndex - 1] = linepctCheck;
                             break;
                           case 6:
-                            console.log("119:linespeed ", lineSpeed);
+                            //console.log("119:linespeed ", lineSpeed);
                             sensorArray[sensorIndex - 1] = s2n(lineSpeed);
 
                             break;
@@ -311,27 +320,44 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                       }
 
                       // let sensorIndex = 7; // sensor array offset
-                      console.log(machine.sensors);
+                      //console.log(machine.sensors);
                       machine.sensors.sensors.map((sensor, index) => {
+                        let rejects;
                         //loop through all the sensors
-                        for (var i = 0; i < sensor.counter.length; i++) {
-                          //loop through the counters of the sensor
-                          insertQuery1 +=
-                            sensor.id + "_" + sensor.counter[i].id + ","; //add the name of the sensor_counter
-
-                          insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
-                          console.log(result);
-                          if (typeof result.Mold === "undefined") {
-                            sensorArray[sensorIndex - 1] = 0;
-                          } else {
-                            // console.log("inside");
-                            // console.log(result.Mold);
-                            sensorArray[sensorIndex - 1] = s2n(
-                              // insert value of counter to sensor array
-                              result.Mold.Sensor[index].Counter[i]["$"].Nb
-                            );
+                        // console.log(
+                        //   "193",
+                        //   sensor.counter.length,
+                        //   mold.Sensor.length
+                        // );
+                        //here is error
+                        console.log("331", sensor.counter);
+                        for (var i = 1; i < sensor.counter.length + 1; i++) {
+                          for (var l = 0; l < result.Mold.Sensor.length; l++) {
+                            if (
+                              sensor.counter[i - 1].id ===
+                              sensorIds[result.Mold.Sensor[l].attributes.id]
+                            ) {
+                              rejects = result.Mold.Sensor[l].Rejects;
+                              //console.log(rejects, sensor.counter[i - 1].id);
+                            }
                           }
+                          //loop through the counters of the sensor
+                          if (index == 0) {
+                            //loop only at the first time ( to write the sensor_counter names )
+                            insertQuery1 +=
+                              "MX4_" + sensor.counter[i - 1].id + ","; //add the name of the sensor_counter
+                          }
+                          insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22 )
 
+                          sensorArray[sensorIndex - 1] = s2n(
+                            // insert value of counter to sensor array
+                            rejects
+                          );
+                          // console.log(
+                          //   sensorIndex,
+                          //   rejects,
+                          //   sensorArray[sensorIndex - 1]
+                          // );
                           sensorIndex++; // increase the index by 1
                         }
                       });
@@ -346,21 +372,26 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     //START GATHERING THE INSERT VALUES
                     //DONE GATHERING THE INSERT VALUES
                     //INSERT VALUES TO DB
-                    console.log("347", insertQuery, sensorArray);
-                    pool
-                      .query(insertQuery, sensorArray)
-                      .then((res) => {
-                        machineData.emit("created", {
-                          type: "created",
-                          data: res.rows[0],
-                        });
-                        lineData.emit("created", {
-                          type: "created",
-                          data: lineData.get(lineId),
-                        });
-                      })
-                      .catch((error) => console.log("!!" + error));
-                    //DONE INSERTING VALUES TO DB
+
+                    //check if linepct is more than 200 % and ignore it
+
+                    console.log("347", linepctCheck, insertQuery, sensorArray);
+                    if (linepctCheck < 200) {
+                      pool
+                        .query(insertQuery, sensorArray)
+                        .then((res) => {
+                          machineData.emit("created", {
+                            type: "created",
+                            data: res.rows[0],
+                          });
+                          lineData.emit("created", {
+                            type: "created",
+                            data: lineData.get(lineId),
+                          });
+                        })
+                        .catch((error) => console.log("!!" + error));
+                      //DONE INSERTING VALUES TO DB
+                    }
                   }
                 } else {
                   console.log("mmm");
@@ -494,13 +525,13 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         }
                         //START GATHERING THE INSERT VALUES
-                        console.log(
-                          "result:",
-                          result.Mold.Machine[0].Inspected[0],
-                          result.Mold.Machine[0].Rejects[0],
-                          lineSpeed,
-                          machine.scantime
-                        );
+                        // console.log(
+                        //   "result:",
+                        //   result.Mold.Machine[0].Inspected[0],
+                        //   result.Mold.Machine[0].Rejects[0],
+                        //   lineSpeed,
+                        //   machine.scantime
+                        // );
                         //calculate machinepct and linepct
                         let machinepct =
                           result.Mold.Machine[0].Inspected[0] > 0
@@ -528,25 +559,29 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           s2n(result.Mold.$.id),
                           ...sensorArray,
                         ];
-                        console.log(insertQuery, values);
+                        //console.log(insertQuery, values);
                         //DONE GATHERING THE INSERT VALUES
                         //INSERT VALUES TO DB
                         //console.log(values);
-                        pool
-                          .query(insertQuery, values)
-                          .then((res) => {
-                            //console.log(res.rows);
-                            machineData.emit("created", {
-                              type: "created",
-                              data: res.rows[0],
-                            });
-                            lineData.emit("created", {
-                              type: "created",
-                              data: lineData.get(lineId),
-                            });
-                          })
-                          .catch((error) => console.log("!!" + error));
-                        //DONE INSERTING VALUES TO DB
+                        if (linepct < 200) {
+                          //if precentage less than 200 ( to skip first scan )
+                          pool
+                            .query(insertQuery, values)
+                            .then((res) => {
+                              //console.log(res.rows);
+                              machineData.emit("created", {
+                                type: "created",
+                                data: res.rows[0],
+                              });
+                              lineData.emit("created", {
+                                type: "created",
+                                data: lineData.get(lineId),
+                              });
+                            })
+                            .catch((error) => console.log("!!" + error));
+
+                          //DONE INSERTING VALUES TO DB
+                        }
                       }
                     });
                   }

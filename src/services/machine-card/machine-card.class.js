@@ -91,15 +91,13 @@ exports.MachineCard = class MachineCard {
         to_timestamp(floor((extract('epoch' from created_at) / 3600 )) * 3600) 
          as interval_alias
         FROM public."${params.query.machine_name}_${params.query.line_number}" 
-        where created_at > '${moment()
-          .subtract(params.query.oldDate, "hours")
-          .format()}'
+        where created_at > '${moment().subtract(6, "hours").format()}'
         GROUP BY interval_alias
         order by interval_alias`
       )
       .then((res) => {
-        console.log(res.rows.length);
         if (res.rows.length !== 0) {
+          console.log("res", res.rows);
           let lineOption = {
             name: params.query.machine_name,
             type: "line",

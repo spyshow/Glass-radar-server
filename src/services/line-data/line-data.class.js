@@ -20,43 +20,49 @@ exports.LineData = class LineData {
       id : id of line  - integer
 
     */
-    let line_number;
-    let options = [];
-    await this.app
-      .service("machines")
-      .find({
-        query: {
-          lineId: id,
-        },
-      })
-      .then(async ({ data }) => {
-        line_number = data[0]["line.line_number"];
 
-        const colorList = [
-          "#9E87FF",
-          "#73DDFF",
-          "#fe9a8b",
-          "#F56948",
-          "#9E87FF",
-        ];
-        for (const [index, value] of data.entries()) {
-          console.log("line data params:", params);
-          options.push(
-            await machineD(
-              value,
-              params,
-              colorList[index],
-              colorList[index + 1]
-            )
-          );
-        }
-        return options;
-      });
-    return {
-      id: line_number,
-      options,
-      text: `A new message with ID: ${id}!`,
-    };
+    if (params.query.newStartDate !== undefined) {
+      let line_number;
+      let options = [];
+      await this.app
+        .service("machines")
+        .find({
+          query: {
+            lineId: id,
+            $sort: {
+              sequence: 1,
+            },
+          },
+        })
+        .then(async ({ data }) => {
+          line_number = data[0]["line.line_number"];
+
+          const colorList = [
+            "#9E87FF",
+            "#73DDFF",
+            "#fe9a8b",
+            "#F56948",
+            "#9E87FF",
+          ];
+          for (const [index, value] of data.entries()) {
+            // console.log("line data params:", params);
+            options.push(
+              await machineD(
+                value,
+                params,
+                colorList[index],
+                colorList[index + 1]
+              )
+            );
+          }
+          return options;
+        });
+      return {
+        id: line_number,
+        options,
+        text: `A new message with ID: ${id}!`,
+      };
+    }
   }
 
   async create(data, params) {
