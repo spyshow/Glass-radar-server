@@ -5064,7 +5064,7 @@ __metadata:
     jest: ^26.0.1
     moment: ^2.29.1
     multer: ^1.4.2
-    nodemon: ^2.0.2
+    nodemon: ^2.0.12
     pg: ^8.0.3
     sequelize: ^5.21.4
     serve-favicon: ^2.5.0
@@ -8526,9 +8526,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^2.0.2":
-  version: 2.0.7
-  resolution: "nodemon@npm:2.0.7"
+"nodemon@npm:^2.0.12":
+  version: 2.0.12
+  resolution: "nodemon@npm:2.0.12"
   dependencies:
     chokidar: ^3.2.2
     debug: ^3.2.6
@@ -8542,7 +8542,7 @@ __metadata:
     update-notifier: ^4.1.0
   bin:
     nodemon: bin/nodemon.js
-  checksum: d1af0b92e73f6cafb7477eb9d8932636205efeed4b06406a4c7b5b8fad5c00a026e703afcd07ec27c57d4285e38ea29f61c57e5c5e72ed503a79be3b02bbba38
+  checksum: c73442ab99c7e614162e87214f0621502654fa571b663a2b4d1c5c2a5ecb610216c53822a228541a5f2bf72bf7bb4c9bfd90448eda500efd989199381ccfa15f
   languageName: node
   linkType: hard
 
