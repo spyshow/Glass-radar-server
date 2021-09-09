@@ -24,7 +24,7 @@ const mm4Init = function (result, insertQuery, machine_name, machine_id, pool) {
       counter = Object.keys(sensor);
 
       let counterId = sensor["$"].id.replace(/[^A-Z0-9]/gi, "");
-      insertQuery += sensorName + " integer,";
+      insertQuery += sensorName + "_" + counterId + " integer,";
 
       counters.push({ id: counterId });
 
