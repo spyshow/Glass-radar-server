@@ -25,6 +25,7 @@ let s2n = (string) => {
 async function scanMMMMachine(machine, line_number, app, lineId) {
   const machineData = app.service("machine-data");
   const lineData = app.service("line-data");
+  const top5Defects = app.service("top-5-defects");
   let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
   //example: MCAL_M22
   let machine_and_line =
@@ -110,6 +111,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
               //calling soap api
               client.Counts({}, function (err, xml) {
                 if (machine.type === "MX4") {
+                  if (err) console.log(err);
                   if (
                     xml == null ||
                     typeof xml.CountsResult === "undefined" ||
@@ -133,12 +135,12 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                     let sensorArray = [];
                     //building the insert statement and array
                     //calculate the line precentage ( if below 200 is ok )
-                    console.log(
-                      result.Inspected,
-                      result.Rejects,
-                      lineSpeed,
-                      machine.scantime
-                    );
+                    // console.log(
+                    //   result.Inspected,
+                    //   result.Rejects,
+                    //   lineSpeed,
+                    //   machine.scantime
+                    // );
 
                     const linepctCheck = s2n(
                       (100 * (result.Inspected - result.Rejects)) /
@@ -330,7 +332,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         //   mold.Sensor.length
                         // );
                         //here is error
-                        console.log("331", sensor.counter);
+                        // console.log("331", sensor.counter);
                         for (var i = 1; i < sensor.counter.length + 1; i++) {
                           for (var l = 0; l < result.Mold.Sensor.length; l++) {
                             if (
@@ -375,7 +377,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
 
                     //check if linepct is more than 200 % and ignore it
 
-                    console.log("347", linepctCheck, insertQuery, sensorArray);
+                    //console.log("347", linepctCheck, insertQuery, sensorArray);
                     if (linepctCheck < 200) {
                       pool
                         .query(insertQuery, sensorArray)
@@ -387,6 +389,10 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           lineData.emit("created", {
                             type: "created",
                             data: lineData.get(lineId),
+                          });
+                          top5Defects.emit("created", {
+                            type: "created",
+                            data: top5Defects.get(lineId),
                           });
                         })
                         .catch((error) => console.log("!!" + error));
@@ -422,7 +428,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         ); // try again in 60 second
                       } else {
                         //console.log(result);
-                        console.log("321", lineId, lehrTime, lineSpeed);
+                        //console.log("321", lineId, lehrTime, lineSpeed);
                         let insertQuery;
                         let sensorArray = [];
                         //building the insert statement and array
@@ -490,8 +496,9 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                           machine.sensors.sensors.map((sensor, index) => {
                             //loop through all the sensors
                             if (sensor.counter.length === 1) {
-                              insertQuery1 += sensor.id + ",";
-                              insertQuery2 += "$" + sensorIndex + " ,";
+                              insertQuery1 +=
+                                sensor.id + "_" + sensor.counter[0].id + ","; //add the name of the sensor_counter
+                              insertQuery2 += "$" + sensorIndex + " ,"; //add the number of the value (ex: $22
 
                               sensorArray[sensorIndex - 8] = s2n(
                                 // insert value of counter to sensor array
@@ -533,6 +540,7 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                         //   machine.scantime
                         // );
                         //calculate machinepct and linepct
+                        console.log(insertQuery);
                         let machinepct =
                           result.Mold.Machine[0].Inspected[0] > 0
                             ? s2n(
@@ -576,6 +584,10 @@ async function scanMMMMachine(machine, line_number, app, lineId) {
                               lineData.emit("created", {
                                 type: "created",
                                 data: lineData.get(lineId),
+                              });
+                              top5Defects.emit("created", {
+                                type: "created",
+                                data: top5Defects.get(lineId),
                               });
                             })
                             .catch((error) => console.log("!!" + error));
