@@ -93,8 +93,10 @@ exports.Scanner = class Scanner {
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
+
+        let lehrTime;
         lines.get(machine.lineId).then(async (line) => {
-          const lehrTime = this.app
+          await this.app
             .service("jobs")
             .find({
               query: {
@@ -103,34 +105,34 @@ exports.Scanner = class Scanner {
               },
             })
             .then((job) => {
-              return job.lehr_time;
+              console.log(job);
+              lehrTime = job.data[0].lehr_time;
+              switch (machine.type) {
+                case "MX4":
+                case "MULTI4":
+                case "MCAL4":
+                  scanMMMMachine(
+                    machine,
+                    line.line_number,
+                    this.app,
+                    machine.lineId
+                  );
+                  break;
+                case "LI":
+                case "VI":
+                case "PALLETIZER":
+                  scanSensor(
+                    machine,
+                    line.line_number,
+                    this.app,
+                    machine.lineId,
+                    lehrTime //we should get the lehr time inside scanSensor
+                  );
+              }
             })
             .catch((err) => {
               console.log("lehrtime: ", err);
             });
-
-          switch (machine.type) {
-            case "MX4":
-            case "MULTI4":
-            case "MCAL4":
-              scanMMMMachine(
-                machine,
-                line.line_number,
-                this.app,
-                machine.lineId
-              );
-              break;
-            case "LI":
-            case "VI":
-            case "PALLETIZER":
-              scanSensor(
-                machine,
-                line.line_number,
-                this.app,
-                machine.lineId,
-                lehrTime
-              );
-          }
         });
       })
       .catch((error) => console.log(error));

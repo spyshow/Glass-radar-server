@@ -1,9 +1,11 @@
 // Initializes the `molds` service on path `/molds`
 const { Molds } = require('./molds.class');
+const createModel = require('../../models/molds.model');
 const hooks = require('./molds.hooks');
 
 module.exports = function (app) {
   const options = {
+    Model: createModel(app),
     paginate: app.get('paginate')
   };
 
