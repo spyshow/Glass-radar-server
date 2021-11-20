@@ -86,7 +86,6 @@ exports.Top5Defects = class Top5Defects {
                   (sumOfDefected[defect] * 100) /
                   sumOfLineSpeed[defect]
                 ).toPrecision(3);
-                console.log(allResults);
                 result = Object.assign(
                   // collect all objects into a single obj
                   ...Object.entries(allResults) // spread the final array as parameters // key a list of key/ value pairs
