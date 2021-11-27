@@ -1,24 +1,49 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
+const { authenticate } = require("@feathersjs/authentication").hooks;
+const { populate } = require("feathers-graph-populate");
+
+const populates = {
+  moldsets: {
+    service: "moldsets",
+    nameAs: "moldsets",
+    keyHere: "setid",
+    keyThere: "id",
+    asArray: false,
+    params: {},
+  },
+};
+const namedQueries = {
+  moldsWithMoldsets: {
+    moldsets: {},
+  },
+};
+
+
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate("jwt")],
     find: [],
     get: [],
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   after: {
-    all: [],
+    all: [
+      populate({
+        populates,
+        namedQueries,
+        defaultQueryName: "moldsWithMoldsets",
+      }),
+    ],
     find: [],
     get: [],
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -28,6 +53,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

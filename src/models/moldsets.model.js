@@ -10,7 +10,7 @@ module.exports = function (app) {
     "moldsets",
     {
       name: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       vendor: {
@@ -35,7 +35,7 @@ module.exports = function (app) {
       },
       date_of_scrap: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
@@ -54,7 +54,7 @@ module.exports = function (app) {
     const { molds } = models;
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    moldsets.hasMany(molds);
+    //moldsets.hasMany(molds);
   };
 
   return moldsets;

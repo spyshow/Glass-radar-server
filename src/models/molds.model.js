@@ -25,7 +25,7 @@ module.exports = function (app) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      statusid: {
+      statusId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -48,7 +48,7 @@ module.exports = function (app) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     const { moldsets } = models;
-    molds.belongsTo(moldsets);
+    // molds.belongsTo(moldsets);
   };
 
   return molds;
