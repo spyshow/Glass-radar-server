@@ -612,13 +612,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@feathers-plus/batch-loader@npm:^0.3.6":
-  version: 0.3.6
-  resolution: "@feathers-plus/batch-loader@npm:0.3.6"
-  checksum: 49ede755094a41d0e0169521a4a84f6fa56b6e833cdc1f03836d66c316c44919835b353093e627bed7a30c5a3ce94a9a67a8899ea4e15e867a66b5dd8332ce5b
-  languageName: node
-  linkType: hard
-
 "@feathersjs/adapter-commons@npm:^4.4.3":
   version: 4.5.11
   resolution: "@feathersjs/adapter-commons@npm:4.5.11"
@@ -1518,7 +1511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.3, ajv@npm:^6.12.6":
+"ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.3":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -4458,21 +4451,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"feathers-hooks-common@npm:^5.0.6":
-  version: 5.0.6
-  resolution: "feathers-hooks-common@npm:5.0.6"
+"feathers-graph-populate@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "feathers-graph-populate@npm:1.4.1"
   dependencies:
-    "@feathers-plus/batch-loader": ^0.3.6
     "@feathersjs/commons": ^4.5.11
-    "@feathersjs/errors": ^4.5.11
-    "@feathersjs/feathers": ^4.5.11
-    ajv: ^6.12.6
-    debug: ^4.3.1
-    graphql: ^15.5.0
-    lodash: ^4.17.21
-    process: 0.11.10
-    traverse: ^0.6.6
-  checksum: 91c696b8bab6f3fc36003863bd6a8c0d3228979324500e8d226cbeba3424b6725a4b77a64eef04a555e1ca31ff15b5294e2fd0c8b09e6fc85d2d5cd18bf5b1d3
+    feathers-shallow-populate: ^2.5.1
+    lodash: ^4.17.20
+  checksum: 3c3dbd6ae8d250ba36dccc04d2af982c218dde04da3386c73a3b74513e10ed1d13d76674d4077194a6e771ea47fdeb630e533019660352e367310fded67469f8
   languageName: node
   linkType: hard
 
@@ -4493,6 +4479,15 @@ __metadata:
     "@feathersjs/commons": ^4.4.3
     "@feathersjs/errors": ^4.4.3
   checksum: 91406d0159179042c1d92864ea35b58fe18b2711c9a203d5085ee7ae0236d6b1cfda469c80f68995f05adb673fbdc8694e0ff22a08d415e700a85b7a2cec48de
+  languageName: node
+  linkType: hard
+
+"feathers-shallow-populate@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "feathers-shallow-populate@npm:2.5.1"
+  dependencies:
+    lodash: ^4.17.20
+  checksum: d8afb0baf66b1c52b58d877a61bfab50d89e954a42578264ad8dc31affb4c4917606e2d0549a51b0a5cb99b31d3e31b0e0898290b9ee86a42f274ccc9e4d3d8a
   languageName: node
   linkType: hard
 
@@ -5082,7 +5077,7 @@ __metadata:
     cron-job-manager: ^2.1.2
     dotenv: ^8.2.0
     eslint: ^6.8.0
-    feathers-hooks-common: ^5.0.6
+    feathers-graph-populate: ^1.4.1
     feathers-profiler: ^0.1.5
     feathers-sequelize: ^6.1.0
     feathers-swagger: ^1.2.1
@@ -5309,13 +5304,6 @@ __metadata:
     request-compose: ^1.2.1
     request-oauth: 0.0.3
   checksum: e704628c1e51dec914db7a1c06ec377c40ad7543ce65fa394f465269eec64a6f51cf836571ee77f2b0ac2f987171f7ba20aca679557cac8b53dfa6cc197834f8
-  languageName: node
-  linkType: hard
-
-"graphql@npm:^15.5.0":
-  version: 15.5.3
-  resolution: "graphql@npm:15.5.3"
-  checksum: 0d507c7fdc1fd42b012827440473bb92b61cf3327f1ef837241c9344e87d2c8bcd400ae3f7acbfd20837e4aa90a31075b9f6d3abb0cc4dacad417bbb1306b89b
   languageName: node
   linkType: hard
 
@@ -7758,7 +7746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -9732,13 +9720,6 @@ __metadata:
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
   checksum: 1d38588e520dab7cea67cbbe2efdd86a10cc7a074c09657635e34f035277b59fbb57d09d8638346bf7090f8e8ebc070c96fa5fd183b777fff4f5edff5e9466cf
-  languageName: node
-  linkType: hard
-
-"process@npm:0.11.10":
-  version: 0.11.10
-  resolution: "process@npm:0.11.10"
-  checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
   languageName: node
   linkType: hard
 
@@ -11950,13 +11931,6 @@ __metadata:
   dependencies:
     punycode: ^2.1.1
   checksum: 2b2b3dfa6bc65d027b2fac729fba0fb5b9d98af7b69ad6876c0f088ebf127f2d53e5a4d4464e5de40380cf721f392262c9183d2a05cea4967a890e8801c842f6
-  languageName: node
-  linkType: hard
-
-"traverse@npm:^0.6.6":
-  version: 0.6.6
-  resolution: "traverse@npm:0.6.6"
-  checksum: e2afa72f11efa9ba31ed763d2d9d2aa244612f22015d16c0ea3ba5f6ca8bf071de87f8108b721885cce06ea4a36ef4605d9228c67e431d9015ea4685cb364420
   languageName: node
   linkType: hard
 
