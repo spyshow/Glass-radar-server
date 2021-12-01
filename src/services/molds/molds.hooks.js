@@ -17,8 +17,6 @@ const namedQueries = {
   },
 };
 
-
-
 module.exports = {
   before: {
     all: [authenticate("jwt")],
