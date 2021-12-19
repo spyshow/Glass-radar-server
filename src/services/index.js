@@ -14,6 +14,7 @@ const linespeed = require("./linespeed/linespeed.service.js");
 const top5Defects = require("./top5defects/top5defects.service.js");
 const moldsets = require("./moldsets/moldsets.service.js");
 const molds = require('./molds/molds.service.js');
+const moldstatus = require('./moldstatus/moldstatus.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -31,4 +32,5 @@ module.exports = function (app) {
   app.configure(top5Defects);
   app.configure(moldsets);
   app.configure(molds);
+  app.configure(moldstatus);
 };
