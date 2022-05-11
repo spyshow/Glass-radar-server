@@ -25,13 +25,9 @@ module.exports = function (app) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      statusId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       note: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
@@ -47,10 +43,9 @@ module.exports = function (app) {
   molds.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    console.log(models);
     const { moldsets, moldstatus } = models;
-    molds.belongsTo(moldsets);
-    molds.hasMany(moldstatus, { as: "status" });
+    molds.belongsTo(moldsets, { onDelete: "CASCADE" });
+    molds.hasMany(moldstatus, { as: "status", foreignKey: "moldId" });
   };
 
   return molds;
