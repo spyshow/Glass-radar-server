@@ -34,12 +34,12 @@ module.exports = function (app) {
 
       lineId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       section: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
 
       defect: {
@@ -49,12 +49,12 @@ module.exports = function (app) {
 
       numberOfGobs: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       operatorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
@@ -71,7 +71,7 @@ module.exports = function (app) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     const { molds } = models;
-    moldstatus.belongsTo(molds);
+    moldstatus.belongsTo(molds, { onDelete: "CASCADE" });
   };
 
   return moldstatus;
