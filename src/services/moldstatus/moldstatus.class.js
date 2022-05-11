@@ -1,5 +1,3 @@
-const { Service } = require('feathers-sequelize');
+const { Service } = require("feathers-sequelize");
 
-exports.Moldstatus = class Moldstatus extends Service {
-  
-};
+exports.Moldstatus = class Moldstatus extends Service {};
