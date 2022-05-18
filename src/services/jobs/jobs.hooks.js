@@ -4,6 +4,7 @@ const { promisify } = require("util");
 const unlinkAsync = promisify(fs.unlink);
 /********************/
 /* TODO: return error when file not exist before delete */
+/* TODO: add association to line service */
 /********************/
 
 const related = async (context) => {
