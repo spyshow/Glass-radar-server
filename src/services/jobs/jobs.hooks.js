@@ -5,9 +5,36 @@ const unlinkAsync = promisify(fs.unlink);
 /********************/
 /* TODO: return error when file not exist before delete */
 /********************/
+
+const related = async (context) => {
+  const sequelize = context.app.get("sequelizeClient");
+  const { moldsets } = sequelize.models;
+  context.params.sequelize = {
+    include: [
+      //{ all: true, nested: true },
+      {
+        model: moldsets,
+        as: "blankMoldsetid",
+      },
+      {
+        model: moldsets,
+        as: "blowMoldsetid",
+      },
+    ],
+
+    raw: false,
+  };
+  return context;
+};
+
 module.exports = {
   before: {
-    all: [authenticate("jwt")],
+    all: [
+      authenticate("jwt"),
+      (context) => {
+        related(context);
+      },
+    ],
     find: [],
     get: [],
     create: [],

@@ -51,10 +51,12 @@ module.exports = function (app) {
   moldsets.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    const { molds } = models;
+    const { jobs, molds } = models;
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     moldsets.hasMany(molds);
+    moldsets.hasMany(jobs);
+    moldsets.hasMany(jobs);
   };
 
   return moldsets;
