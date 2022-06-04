@@ -29,7 +29,7 @@ module.exports = function (app) {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      mac: {
+      channel: {
         type: DataTypes.STRING,
         allowNull: true,
       },

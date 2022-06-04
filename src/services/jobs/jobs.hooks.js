@@ -30,15 +30,22 @@ const related = async (context) => {
 
 module.exports = {
   before: {
-    all: [
-      authenticate("jwt"),
+    all: [authenticate("jwt")],
+    find: [
       (context) => {
         related(context);
       },
     ],
-    find: [],
-    get: [],
-    create: [],
+    get: [
+      (context) => {
+        related(context);
+      },
+    ],
+    create: [
+      (context) => {
+        console.log("create", context.data);
+      },
+    ],
     update: [],
     patch: [],
     remove: [

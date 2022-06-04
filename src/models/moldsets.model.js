@@ -55,6 +55,7 @@ module.exports = function (app) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     moldsets.hasMany(molds);
+    /*TODO : a foreign key "moldsetsId" is generated automatically by sequelize. but it's not needed*/
     moldsets.hasMany(jobs);
     moldsets.hasMany(jobs);
   };
