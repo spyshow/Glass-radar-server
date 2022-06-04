@@ -4,13 +4,10 @@ const CronJobManager = require("cron-job-manager");
 const manager = new CronJobManager();
 const pool = require("../../db");
 const axios = require("axios").default;
-
-let s2n = (string) => {
-  return parseInt(string, 10);
-};
+const moment = require("moment");
 
 const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
-  console.log("!!" + lineId);
+  console.log("!!" + machine.scantime);
   await console.log("1234", lehrTime, 60 * 1000 - lehrTime * 60 * 1000);
   const mahcnieData = app.service("machine-data");
   let lineSpeed;
@@ -31,8 +28,7 @@ const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
       },
     })
     .then((linespeed) => {
-      console.log("linespeed", linespeed);
-      lineSpeed = linespeed.data[0] ? linespeed.data[0].speed : 200;
+      lineSpeed = linespeed.data[0].speed;
       console.log("linespeed", lineSpeed);
     });
   //each machine
@@ -49,20 +45,15 @@ const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
       () => {
         console.log("start ");
         axios
-          .get(`${machine.url}/di_value/slot_0/ch_${machine.channel}`, {
-            // Axios looks for the `auth` option, and, if it is set, formats a
-            // basic auth header for you automatically.
-            auth: {
-              username: "admin",
-              password: "thespy",
+          .get(machine.url, {
+            params: {
+              mac: machine.mac,
             },
           })
           .then((response) => {
-            let linepct = s2n(
-              (100 * response.data.Val) / (lineSpeed * machine.scantime)
-            );
+            console.log(response);
             //building Insert query
-            let insertQuery = `INSERT INTO "${machine_and_line}" (id,machine_id,linespeed ,inspected ,linepct,created_at, updated_at)  VALUES (uuid_generate_v4(),${machine.id},${lineSpeed},${response.data.Val},${linepct}, DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;`;
+            let insertQuery = `INSERT INTO "${machine_and_line}" (id,machine_id,linespeed ,inspected ,created_at, updated_at)  VALUES (uuid_generate_v4(),${machine.id},${lineSpeed},${response.data.count}, DATE_TRUNC('minute', NOW()::timestamp),  DATE_TRUNC('minute', NOW()::timestamp)) RETURNING *;`;
             console.log(insertQuery);
             pool.query(insertQuery).then((res) => {
               mahcnieData.emit("created", {
@@ -71,24 +62,7 @@ const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
               });
             });
           })
-          .then(() => {
-            axios.post(
-              `${machine.url}/di_value/slot_0/ch_${machine.channel}`,
-              {
-                Ch: 0,
-                ClrCnt: 1,
-              },
-              {
-                // Axios looks for the `auth` option, and, if it is set, formats a
-                // basic auth header for you automatically.
-                auth: {
-                  username: "root",
-                  password: "thespy",
-                },
-              }
-            );
-          })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log("!!" + error));
       },
       { start: true } // start the cron job immediately
     );
