@@ -73,7 +73,7 @@ exports.MachineInit = class MachineInit {
         insertQuery =
           'CREATE TABLE IF NOT EXISTS "' +
           machine_and_line +
-          '" ( id uuid NOT NULL, machine_id integer, inspected integer,linepct integer, linespeed integer, created_at timestamp with time zone,updated_at timestamp with time zone, ' +
+          '" ( id uuid NOT NULL, machine_id integer, inspected integer,machinepct integer,linepct integer, linespeed integer, created_at timestamp with time zone,updated_at timestamp with time zone, ' +
           "CONSTRAINT " +
           machine_and_line +
           "_pkey PRIMARY KEY (id), " +

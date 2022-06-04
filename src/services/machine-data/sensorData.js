@@ -553,7 +553,6 @@ const sensorData = async function (params, colors) {
     oldMachineData[1] === undefined
       ? 0
       : (oldMachineData[1].rejected * 100) / oldMachineData[0].inspected;
-  return (newPrecentage,oldPrecentage)
 };
 
 exports.sensorData = sensorData;
