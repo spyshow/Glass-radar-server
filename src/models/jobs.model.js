@@ -68,7 +68,6 @@ module.exports = function (app) {
     const { jobs, moldsets } = models;
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    /*TODO : a foreign key "moldsetsId" is generated automatically by sequelize. but it's not needed*/
     jobs.belongsTo(moldsets, {
       as: "blowMoldsetid",
       foreignKey: "blow_moldsetid",
