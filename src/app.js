@@ -17,6 +17,7 @@ const appHooks = require("./app.hooks");
 const channels = require("./channels");
 const authentication = require("./authentication");
 const sequelize = require("./sequelize");
+const swagger = require("feathers-swagger");
 
 const app = express(feathers());
 
@@ -32,7 +33,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get("public"), "favicon.ico")));
 // Host the public folder
 app.use("/", express.static(app.get("public")));
-
+//configure swagger
+app.configure(
+  swagger({
+    docsPath: "/docs",
+    uiIndex: path.join(__dirname, "docs.html"),
+    specs: {
+      info: {
+        title: "A test",
+        description: "A description",
+        version: "1.0.0",
+      },
+    },
+  })
+);
 // Set up Plugins and providers
 app.configure(express.rest());
 app.configure(socketio());
