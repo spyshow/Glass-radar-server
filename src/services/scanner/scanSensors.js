@@ -10,6 +10,9 @@ let s2n = (string) => {
 };
 
 const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
+  const machineData = app.service("machine-data");
+  const lineData = app.service("line-data");
+  const top5Defects = app.service("top-5-defects");
   console.log("!!" + lineId);
   await console.log("1234", lehrTime, 60 * 1000 - lehrTime * 60 * 1000);
   const mahcnieData = app.service("machine-data");
@@ -68,6 +71,14 @@ const scanSensor = async (machine, line_number, app, lineId, lehrTime) => {
               mahcnieData.emit("created", {
                 type: "created",
                 data: res.rows[0],
+              });
+              lineData.emit("created", {
+                type: "created",
+                data: lineData.get(lineId),
+              });
+              top5Defects.emit("created", {
+                type: "created",
+                data: top5Defects.get(lineId),
               });
             });
           })
