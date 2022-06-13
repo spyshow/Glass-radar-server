@@ -29,7 +29,7 @@ module.exports = function (app) {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      mac: {
+      channel: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -48,6 +48,14 @@ module.exports = function (app) {
       sequence: {
         type: DataTypes.INTEGER,
         allowNull: true,
+      },
+      primaryColor: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      secondaryColor: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {
