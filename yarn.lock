@@ -2570,6 +2570,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chroma-js@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "chroma-js@npm:2.4.2"
+  checksum: cf9884c02d406286e4370599bcd1afbf089384407df46b3a69edfedcba7bb99e8f959a5cfdbfec750b305c441c06ca40cd1f70ba3a6c2ce739ac09a92520ddae
+  languageName: node
+  linkType: hard
+
 "ci-info@npm:^1.5.0":
   version: 1.6.0
   resolution: "ci-info@npm:1.6.0"
@@ -5078,6 +5085,7 @@ __metadata:
     "@feathersjs/socketio": ^4.5.1
     "@feathersjs/transport-commons": ^4.5.3
     axios: ^0.21.1
+    chroma-js: ^2.4.2
     compression: ^1.7.4
     cors: ^2.8.5
     cron: 1.7.2
