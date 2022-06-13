@@ -1,13 +1,13 @@
 /* eslint-disable linebreak-style */
 const pool = require("./../../db");
 const { round } = require("./../../utils/round");
+const { autoColorPicker } = require("../../utils/color");
 
-const sensorData = async function (params, colors) {
+const sensorData = async function (params) {
   let previousDate = "Previous time";
   let selectedDate = "selected date";
   let newPrecentage, oldPrecentage;
 
-  const colorList = ["#9E87FF", "#73DDFF", "#fe9a8b", "#F56948", "#9E87FF"];
   let option = {
     tooltip: {
       trigger: "axis",
@@ -122,6 +122,7 @@ const sensorData = async function (params, colors) {
     ],
     series: [
       {
+        //old data
         type: "line",
         data: [],
         symbolSize: 1,
@@ -140,25 +141,26 @@ const sensorData = async function (params, colors) {
             colorStops: [
               {
                 offset: 0,
-                color: "#fe9a8b", //color1, // color at 0% position
+                color: params.query.secondary, //color1, // color at 0% position
               },
               {
                 offset: 1,
-                color: "#F56948", //color2, // color at 100% position
+                color: autoColorPicker(params.query.secondary), //color2, // color at 100% position
               },
             ],
             global: false, // false by default
           },
-          shadowColor: "#fe9a8b", //color1,
+          shadowColor: params.query.secondary, //color1,
           shadowBlur: 10,
           shadowOffsetY: 7,
         },
         itemStyle: {
-          color: "#fe9a8b", //color1,
-          borderColor: "#fe9a8b", //color1,
+          color: params.query.secondary, //color1,
+          borderColor: params.query.secondary, //color1,
         },
       },
       {
+        //new data
         type: "line",
         data: [],
         symbolSize: 1,
@@ -177,35 +179,28 @@ const sensorData = async function (params, colors) {
             colorStops: [
               {
                 offset: 0,
-                color: "#fe9a8b", //color1, // color at 0% position
+                color: params.query.primary, //color1, // color at 0% position
               },
               {
                 offset: 1,
-                color: "#F56948", //color2, // color at 100% position
+                color: autoColorPicker(params.query.primary), //color2, // color at 100% position
               },
             ],
             global: false, // false by default
           },
-          shadowColor: "#fe9a8b", //color1,
+          shadowColor: params.query.primary, //color1,
           shadowBlur: 10,
           shadowOffsetY: 7,
         },
         itemStyle: {
-          color: "#fe9a8b", //color1,
-          borderColor: "#fe9a8b", //color1,
+          color: params.query.primary, //color1,
+          borderColor: params.query.primary, //color1,
         },
       },
     ],
   };
 
   //querying old data
-  console.log("dates", params.query.oldStartDate, params.query.oldEndDate);
-  console.log("dates", params.query.newStartDate, params.query.newEndDate);
-  console.log(`SELECT DISTINCT "${params.query.machine_name}".linepct
-  ,created_at
-   FROM public."${params.query.machine_name}"
-  where created_at BETWEEN '${params.query.newStartDate}' AND '${params.query.newEndDate}'
-  order by created_at DESC`);
   await pool
     .query(
       `SELECT DISTINCT "${params.query.machine_name}".linepct
@@ -229,7 +224,6 @@ const sensorData = async function (params, colors) {
         oldPrecentage = totalLinePct / res.rows.length; // get the percentage of the total linepct
       }
     });
-  console.log(option.series[0].data);
   await pool
     .query(
       `SELECT DISTINCT "${params.query.machine_name}".linepct
@@ -243,8 +237,6 @@ const sensorData = async function (params, colors) {
         option.series[1].data = [];
         return (option.series[1].data = null);
       } else {
-        console.log("here");
-
         option.id = params.query.machine_name;
         option.type = params.query.machine_type;
         let totalLinePct = 0;
@@ -256,7 +248,6 @@ const sensorData = async function (params, colors) {
         newPrecentage = totalLinePct / res.rows.length; // get the percentage of the total linepct
       }
     });
-  console.log("option", option.series[1].data);
   return {
     data: [option],
     newPrecentage: round(newPrecentage, 2),

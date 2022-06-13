@@ -4,8 +4,9 @@ var moment = require("moment");
 const { separateObject } = require("../../utils/separateObject");
 const { removeA } = require("../../utils/removeA");
 const { round } = require("./../../utils/round");
+const { colorArray, basicColorArray } = require("../../utils/color");
 
-const mmmData = async function (params, colors) {
+const mmmData = async function (params) {
   let totalwidth = 0;
   let previousDate = "Previous time";
   let selectedDate = "selected date";
@@ -13,23 +14,17 @@ const mmmData = async function (params, colors) {
   let oldResult = {};
   let oldMachineData, newMachineData;
   let data = { xData: [], yData: [], y1Data: [] };
-
+  let colors = colorArray(params.query.primary, params.query.secondary);
+  console.log(colors);
   let option = {
-    color: [
-      "#ae1029",
-      "#0065c2",
-      "#26c238",
-      "#9876aa",
-      "#fb8649",
-      "#57904b",
-      "#d35b5c",
-    ],
+    color: basicColorArray(params.query.primary, params.query.secondary),
     tooltip: {
       trigger: "axis",
       axisPointer: {
         type: "shadow",
       },
     },
+
     // dataZoom: {
     //   type: "slider",
     //   show: true,
@@ -70,7 +65,24 @@ const mmmData = async function (params, colors) {
       top: 20,
       right: 150,
       orient: "vertical",
-      data: [previousDate, selectedDate],
+      data: [
+        {
+          name: previousDate,
+          icon: "path://M.971.923h25v14h-25zM1.536 1.222L15.09 14.778M.91 7.472l7.307 7.306M8.285.972L22.03 14.716M15.911.971l9.931 9.932",
+          itemStyle: {
+            color: "white",
+            borderColor: params.query.secondary,
+            borderWidth: 1,
+          },
+        },
+        {
+          name: selectedDate,
+          icon: "rect",
+          itemStyle: {
+            color: params.query.primary,
+          },
+        },
+      ],
       formatter:
         "{name} (" +
         moment(params.query.newStartDate).from(params.query.oldStartDate) +
@@ -359,7 +371,7 @@ const mmmData = async function (params, colors) {
       barGap: 0,
       barWidth: 100 * width,
       itemStyle: {
-        color: colors[i][0],
+        color: colors[i][6],
       },
       xAxisIndex: 1,
       yAxisIndex: 1,
@@ -386,7 +398,7 @@ const mmmData = async function (params, colors) {
   for (let s = 0; s < deleteSensorIndex.length; s++) {
     option.series.splice(deleteSensorIndex[s], 1);
   }
-  
+
   return {
     data: [option],
     newPrecentage: round(newPrecentage, 2),

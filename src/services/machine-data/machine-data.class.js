@@ -114,12 +114,12 @@ exports.MachineData = class MachineData {
       case "MX4":
       case "MULTI4":
       case "MCAL4":
-        return await mmmData(params, colors);
+        return await mmmData(params);
 
       case "LI":
       case "PALLETIZER":
       case "VI":
-        return await sensorData(params, colors);
+        return await sensorData(params);
     }
   }
 
