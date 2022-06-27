@@ -36,12 +36,12 @@ server.on("listening", () => {
     last_name: "admin",
     password: "password",
     timezone: "Asia/Damascus (2:00)",
-    roles: ["Admin", "Moderator", "Mold Admin", "Operator"],
+    roles: ["Admin", "Moderator", "Mold Admin", "Operator", "User"],
   };
   init.create(defaultUser);
 
   logger.info(
-    "Feathers application started on http://%s:%d",
+    "Feathers application started on http://%s:%d , wooohooo!!!",
     app.get("host"),
     port
   );
