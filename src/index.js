@@ -3,6 +3,7 @@ const logger = require("./logger");
 const app = require("./app");
 const port = app.get("port");
 const server = app.listen(port);
+const init = app.service("init");
 const CronJobManager = require("cron-job-manager");
 const manager = new CronJobManager();
 const pool = require("./../../db");
@@ -38,9 +39,19 @@ server.on("listening", async () => {
       }
     );
   }
+  //run init service once server start
+  let defaultUser = {
+    email: "admin@glassradar.com",
+    first_name: "admin",
+    last_name: "admin",
+    password: "password",
+    timezone: "Asia/Damascus (2:00)",
+    roles: ["Admin", "Moderator", "Mold Admin", "Operator", "User"],
+  };
+  init.create(defaultUser);
 
   logger.info(
-    "Feathers application started on http://%s:%d",
+    "Feathers application started on http://%s:%d , wooohooo!!!",
     app.get("host"),
     port
   );

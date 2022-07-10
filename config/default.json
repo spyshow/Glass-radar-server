@@ -25,5 +25,5 @@
       "passwordField": "password"
     }
   },
-  "postgres": "postgresql://postgres:thespy@localhost:5432/radar"
+  "postgres": "postgresql://postgres:password@postgres:5432/radar"
 }

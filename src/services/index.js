@@ -16,6 +16,7 @@ const moldsets = require("./moldsets/moldsets.service.js");
 const molds = require("./molds/molds.service.js");
 const moldstatus = require("./moldstatus/moldstatus.service.js");
 const botLineData = require("./bot-line-data/bot-line-data.service.js");
+const init = require("./init/init.service.js");
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -35,4 +36,5 @@ module.exports = function (app) {
   app.configure(molds);
   app.configure(moldstatus);
   app.configure(botLineData);
+  app.configure(init);
 };
