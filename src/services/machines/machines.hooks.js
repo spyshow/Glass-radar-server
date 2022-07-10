@@ -1,3 +1,5 @@
+const app = require("../../app");
+
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
 module.exports = {
@@ -91,6 +93,7 @@ module.exports = {
             "machine_name"
           ].toUpperCase()}_${line.line_number.toUpperCase()}" ;`
         );
+        await app.service("scanner").remove(context.id);
         // await queryInterface
         //   .dropTable()
         //   .then(() => {

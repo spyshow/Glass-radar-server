@@ -104,31 +104,42 @@ exports.Scanner = class Scanner {
                 line: line.line_number,
               },
             })
-            .then((job) => {
+            .then(async (job) => {
               console.log(job);
               lehrTime = job.data[0].lehr_time;
-              switch (machine.type) {
-                case "MX4":
-                case "MULTI4":
-                case "MCAL4":
-                  scanMMMMachine(
-                    machine,
-                    line.line_number,
-                    this.app,
-                    machine.lineId
-                  );
-                  break;
-                case "LI":
-                case "VI":
-                case "PALLETIZER":
-                  scanSensor(
-                    machine,
-                    line.line_number,
-                    this.app,
-                    machine.lineId,
-                    lehrTime //we should get the lehr time inside scanSensor
-                  );
-              }
+              let machine_and_line =
+                machine.machine_name +
+                "_" +
+                line.line_number.replace(/[^A-Z0-9]/gi, "");
+              await pool
+                .query({
+                  text: "INSERT INTO scanner (name ,active,machine_id) VALUES ( $1,$2,$3 )",
+                  values: [machine_and_line, true, data.id],
+                })
+                .then((res) => {
+                  switch (machine.type) {
+                    case "MX4":
+                    case "MULTI4":
+                    case "MCAL4":
+                      scanMMMMachine(
+                        machine,
+                        line.line_number,
+                        this.app,
+                        machine.lineId
+                      );
+                      break;
+                    case "LI":
+                    case "VI":
+                    case "PALLETIZER":
+                      scanSensor(
+                        machine,
+                        line.line_number,
+                        this.app,
+                        machine.lineId,
+                        lehrTime //we should get the lehr time inside scanSensor
+                      );
+                  }
+                });
             })
             .catch((err) => {
               console.log("lehrtime: ", err);
@@ -169,14 +180,25 @@ exports.Scanner = class Scanner {
   async patch(id, data, params) {}
   // stop the scanning for a specific machines
   async remove(data, params) {
+    let machine_and_line;
     console.log(data);
     const lines = this.app.service("lines");
     await pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
-        lines.get(machine.lineId).then((line) => {
+        lines.get(machine.lineId).then(async (line) => {
           console.log(line);
+          machine_and_line =
+            machine.machine_name +
+            "_" +
+            line.line_number.replace(/[^A-Z0-9]/gi, "");
+          await pool
+            .query({
+              text: "DELETE FROM scanner WHERE machine_id= $1 AND active = $2",
+              values: [data.id, true],
+            })
+            .catch((error) => console.log(error));
           switch (machine.type) {
             case "MX4":
             case "MULTI4":
@@ -191,6 +213,7 @@ exports.Scanner = class Scanner {
         });
       })
       .catch((error) => console.log(error));
-    return "done remove";
+
+    return "done removing " + machine_and_line + " scanner. ";
   }
 };
