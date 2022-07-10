@@ -31,36 +31,28 @@ const mmmData = async function (params) {
     //   start: 0,
     //   xAxisIndex: 0,
     // },
-    // dataZoom: [
-    //   {
-    //     show: true,
-    //     type: "slider",
-    //     start: 0,
-    //     end: 100,
-    //     filterMode: "filter",
-    //   },
-    //   {
-    //     type: "inside",
-    //     start: 0,
-    //     end: 100,
-    //   },
-    //   {
-    //     show: false,
-    //     yAxisIndex: 0,
-    //     filterMode: "empty",
-    //     width: 30,
-    //     height: "80%",
-    //     showDataShadow: false,
-    //     left: "93%",
-    //   },
-    // ],
     dataZoom: [
       {
-        xAxisIndex: [0],
-        handleIcon:
-          "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+        show: true,
+        type: "slider",
+        xAxisIndex: [0, 1, 2, 3],
+        end: 100,
+        filterMode: "filter",
+      },
+      {
+        type: "inside",
+        xAxisIndex: [0, 1],
+        start: 0,
+        end: 100,
       },
     ],
+    // dataZoom: [
+    //   {
+    //     xAxisIndex: [0],
+    //     handleIcon:
+    //       "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+    //   },
+    // ],
     legend: {
       top: 20,
       right: 150,
@@ -184,6 +176,7 @@ const mmmData = async function (params) {
         },
       },
     ],
+
     series: [
       {
         name: previousDate,
@@ -347,6 +340,7 @@ const mmmData = async function (params) {
         (newData && newData.value !== 0) ||
         (oldData && oldData.value !== 0)
       ) {
+        
         data.y1Data.push(newData);
         data.yData.push(oldData);
         data.xData.push(defect.id);
@@ -398,7 +392,6 @@ const mmmData = async function (params) {
   for (let s = 0; s < deleteSensorIndex.length; s++) {
     option.series.splice(deleteSensorIndex[s], 1);
   }
-
   return {
     data: [option],
     newPrecentage: round(newPrecentage, 2),
