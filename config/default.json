@@ -1,5 +1,5 @@
 {
-  "host": "localhost",
+  "host": "api",
   "port": 3030,
   "public": "../public/",
   "paginate": {
@@ -15,7 +15,7 @@
       "header": {
         "typ": "access"
       },
-      "audience": "http://localhost:3030/",
+      "audience": "http://api:3030/",
       "issuer": "feathers",
       "algorithm": "HS256",
       "expiresIn": "6d"
@@ -25,5 +25,6 @@
       "passwordField": "password"
     }
   },
-  "postgres": "postgresql://postgres:password@postgres:5432/radar"
+
+  "postgres": "postgresql://postgres:thespy@db:5432/radar"
 }

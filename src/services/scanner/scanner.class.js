@@ -2,6 +2,7 @@
 /* eslint-disable quotes */
 
 const pool = require("./../../db");
+const moment = require("moment");
 const {
   scanMMMMachine,
   removeMMMMachine,
@@ -105,7 +106,6 @@ exports.Scanner = class Scanner {
               },
             })
             .then(async (job) => {
-              console.log(job);
               lehrTime = job.data[0].lehr_time;
               let machine_and_line =
                 machine.machine_name +
@@ -113,40 +113,57 @@ exports.Scanner = class Scanner {
                 line.line_number.replace(/[^A-Z0-9]/gi, "");
               await pool
                 .query({
-                  text: "INSERT INTO scanner (name ,active,machine_id) VALUES ( $1,$2,$3 )",
-                  values: [machine_and_line, true, data.id],
+                  text: `SELECT * FROM public.scanner WHERE active=$1 AND machine_id=$2`,
+                  values: [true, data.id],
                 })
-                .then((res) => {
-                  switch (machine.type) {
-                    case "MX4":
-                    case "MULTI4":
-                    case "MCAL4":
-                      scanMMMMachine(
-                        machine,
-                        line.line_number,
-                        this.app,
-                        machine.lineId
-                      );
-                      break;
-                    case "LI":
-                    case "VI":
-                    case "PALLETIZER":
-                      scanSensor(
-                        machine,
-                        line.line_number,
-                        this.app,
-                        machine.lineId,
-                        lehrTime //we should get the lehr time inside scanSensor
-                      );
+                .then(async (res) => {
+                  console.log(res);
+                  if (res.rows.length === 0) {
+                    await pool
+                      .query({
+                        text: `INSERT INTO public.scanner (name ,active,machine_id,"createdAt","updatedAt") VALUES ( $1,$2,$3,$4,$5 )`,
+                        values: [
+                          machine_and_line,
+                          true,
+                          data.id,
+                          moment(),
+                          moment(),
+                        ],
+                      })
+                      .catch((error) => console.log("insert ", error));
                   }
-                });
+                })
+                .catch((error) => console.log("select scanner ", error));
+
+              switch (machine.type) {
+                case "MX4":
+                case "MULTI4":
+                case "MCAL4":
+                  scanMMMMachine(
+                    machine,
+                    line.line_number,
+                    this.app,
+                    machine.lineId
+                  );
+                  break;
+                case "LI":
+                case "VI":
+                case "PALLETIZER":
+                  scanSensor(
+                    machine,
+                    line.line_number,
+                    this.app,
+                    machine.lineId,
+                    lehrTime //we should get the lehr time inside scanSensor
+                  );
+              }
             })
             .catch((err) => {
               console.log("lehrtime: ", err);
             });
         });
-      })
-      .catch((error) => console.log(error));
+      });
+
     return "scanning";
   }
 
@@ -159,7 +176,6 @@ exports.Scanner = class Scanner {
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then((line) => {
-          console.log(line, data);
           switch (machine.type) {
             case "MX4":
             case "MULTI4":
@@ -181,14 +197,12 @@ exports.Scanner = class Scanner {
   // stop the scanning for a specific machines
   async remove(data, params) {
     let machine_and_line;
-    console.log(data);
     const lines = this.app.service("lines");
     await pool
       .query({ text: "SELECT * FROM machines WHERE id=$1", values: [data.id] })
       .then((res) => {
         let machine = res.rows[0];
         lines.get(machine.lineId).then(async (line) => {
-          console.log(line);
           machine_and_line =
             machine.machine_name +
             "_" +

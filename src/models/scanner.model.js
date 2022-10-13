@@ -9,7 +9,7 @@ module.exports = function (app) {
   const scanner = sequelizeClient.define(
     "scanner",
     //we need : 1 - name of the scanner example: MCAL_M22
-    //          2 - status
+    //          2 - active
     //          3 - machine id
     //
     {
@@ -22,7 +22,7 @@ module.exports = function (app) {
         allowNull: false,
       },
       machine_id: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

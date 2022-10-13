@@ -1,0 +1,38 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["release"]
+  pull_request:
+    branches: ["release"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3.4.1
+      - run: npm install
+      - run: CI= npm run build
+
+  buildContainer:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag spyshow/glass-radar-api:${{ steps.package-version.outputs.current-version}} --tag spyshow/glass-radar-api:latest
+      - name: docker push
+        run: |
+          docker push spyshow/glass-radar-ui:${{ steps.package-version.outputs.current-version}}
+          docker push spyshow/glass-radar-api:latest

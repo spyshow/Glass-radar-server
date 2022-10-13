@@ -6,7 +6,7 @@ const server = app.listen(port);
 const init = app.service("init");
 const CronJobManager = require("cron-job-manager");
 const manager = new CronJobManager();
-const pool = require("./../../db");
+const pool = require("./db");
 
 process.on("unhandledRejection", (reason, p) =>
   logger.error("Unhandled Rejection at: Promise ", p, reason)
@@ -21,7 +21,7 @@ server.on("listening", async () => {
     .query({ text: "SELECT * FROM scanner WHERE active=true" })
     .then((res) => {
       res.rows.forEach((scanner) => {
-        app.service("scanner").create(scanner.id);
+        app.service("scanner").create({ id: scanner.machine_id });
       });
     })
     .catch((err) => console.log(err));
