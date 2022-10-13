@@ -34,5 +34,5 @@ jobs:
         run: docker build . --file Dockerfile --tag spyshow/glass-radar-api:${{ steps.package-version.outputs.current-version}} --tag spyshow/glass-radar-api:latest
       - name: docker push
         run: |
-          docker push spyshow/glass-radar-ui:${{ steps.package-version.outputs.current-version}}
+          docker push spyshow/glass-radar-api:${{ steps.package-version.outputs.current-version}}
           docker push spyshow/glass-radar-api:latest
