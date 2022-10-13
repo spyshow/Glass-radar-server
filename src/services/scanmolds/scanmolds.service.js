@@ -1,6 +1,6 @@
 // Initializes the `molds` service on path `/molds`
-const { ScanMolds } = require("./scanMolds.class");
-const hooks = require("./scanMolds.hooks");
+const { ScanMolds } = require("./scanmolds.class");
+const hooks = require("./scanmolds.hooks");
 
 module.exports = function (app) {
   const options = {
