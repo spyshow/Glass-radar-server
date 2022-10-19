@@ -1,7 +1,18 @@
 const Sequelize = require("sequelize");
 
 module.exports = function (app) {
-  const connectionString = app.get("postgres");
+  //"postgresql://postgres:thespy@localhost:5432/radar"
+  const connectionString =
+    "postgresql://" +
+    process.env.PGUSER +
+    ":" +
+    process.env.PGPASSWORD +
+    "@" +
+    process.env.PGHOST +
+    ":" +
+    process.env.PGPORT +
+    "/" +
+    process.env.PGDATABASE;
   const sequelize = new Sequelize(connectionString, {
     dialect: "postgres",
     logging: false,

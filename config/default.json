@@ -26,5 +26,5 @@
     }
   },
 
-  "postgres": "postgresql://postgres:thespy@db:5432/radar"
+  "postgres": "postgresql://postgres:thespy@localhost:5432/radar"
 }
