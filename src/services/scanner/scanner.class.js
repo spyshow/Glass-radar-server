@@ -2,7 +2,7 @@
 /* eslint-disable quotes */
 
 const pool = require("./../../db");
-const moment = require("moment");
+const dayjs = require('dayjs');
 const {
   scanMMMMachine,
   removeMMMMachine,
@@ -38,6 +38,7 @@ exports.Scanner = class Scanner {
                 return job.lehr_time;
               });
             console.log("scanner:39:", lehrTime);
+            
             return scanMMMMachine(
               machine,
               line.line_number,
@@ -126,8 +127,8 @@ exports.Scanner = class Scanner {
                           machine_and_line,
                           true,
                           data.id,
-                          moment(),
-                          moment(),
+                          dayjs(),
+                          dayjs(),
                         ],
                       })
                       .catch((error) => console.log("insert ", error));

@@ -1,16 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable indent */
 /* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-const soap = require("soap");
-const parseString = require("xml2js").parseString;
-const CronJobManager = require("cron-job-manager");
-const manager = new CronJobManager();
-const pool = require("../../db");
-const { workerData } = require("worker_threads");
-const dayjs = require('dayjs');
-
-
 const sensorIds = {
   16: "LNM",
   40: "Plug",
@@ -19,22 +9,30 @@ const sensorIds = {
   46: "Thickness",
   121: "unknow",
 };
+/* eslint-disable quotes */
+const soap = require("soap");
+const parseString = require("xml2js").parseString;
+const pool = require("../../db");
+const moment = require("moment");
+const { workerData } = require("worker_threads");
 
 // function to change string to number
 let s2n = (string) => {
   return parseInt(string, 10);
 };
-const { machine, line_number, app, lineId, bree } = workerData;
+
+const machine = workerData.machine;
+const line_number = workerData.line_number;
+const app = workerData.app;
+const lineId = workerData.lineId;
 const machineData = app.service("machine-data");
 const lineData = app.service("line-data");
 const top5Defects = app.service("top-5-defects");
-let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
+//let scantime = "*/" + machine.scantime + " * * * *"; // we make a cron time string for the scan time
 //example: MCAL_M22
 let machine_and_line =
   machine.machine_name + "_" + line_number.replace(/[^A-Z0-9]/gi, ""); //make a string for the cron name (name of the machine _ number of line) all in capital letters
-console.log("32: manager ", manager.exists(machine_and_line));
-
-(async () => {
+async () => {
   let lineSpeed, lehrTime;
   await app
     .service("jobs")
@@ -53,8 +51,8 @@ console.log("32: manager ", manager.exists(machine_and_line));
       query: {
         lineId: lineId,
         createdAt: {
-          $lt: dayjs().add(60 * 1000 - lehrTime * 60 * 1000),
-          $gt: dayjs().subtract(60 * 1000 + lehrTime * 60 * 1000),
+          $lt: moment().add(60 * 1000 - lehrTime * 60 * 1000),
+          $gt: moment().subtract(60 * 1000 + lehrTime * 60 * 1000),
         },
         $limit: 1,
         $sort: {
@@ -95,8 +93,8 @@ console.log("32: manager ", manager.exists(machine_and_line));
       if (err) console.log(err);
       if (typeof client === "undefined") {
         //if the first call for the API it will return an empty respond
-        console.log("99:undefined");
-        setTimeout(scanMMMMachine, 60000, machine, line_number, app, lineId); // call the function again after 60 second
+        // call the function again after 60 second
+        return null;
       } else {
         console.log(machine.type);
         //calling soap api
@@ -110,14 +108,7 @@ console.log("32: manager ", manager.exists(machine_and_line));
             ) {
               console.log("waiting result ... ");
               // if the respond is empty
-              setTimeout(
-                scanMMMMachine,
-                60000,
-                machine,
-                line_number,
-                app,
-                lineId
-              ); // try again in 60 second
+              return null;
             } else {
               let result = xml.CountsResult.Root.Machine;
               //console.log(result.attributes.Id);
@@ -387,13 +378,11 @@ console.log("32: manager ", manager.exists(machine_and_line));
             if (xml == null || typeof xml === "undefined") {
               console.log("waiting result ... ");
               // if the respond is empty
-              setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
             } else {
               parseString(xml.CountsResult, function (err, result) {
                 if (result == null) {
                   console.log("waiting result " + machine_and_line + "... ");
                   // if the respond is empty
-                  setTimeout(scanMMMMachine, 60000, machine, line_number, app); // try again in 60 second
                 } else {
                   //console.log(result);
                   //console.log("321", lineId, lehrTime, lineSpeed);
@@ -564,4 +553,4 @@ console.log("32: manager ", manager.exists(machine_and_line));
       }
     }
   );
-})();
+};

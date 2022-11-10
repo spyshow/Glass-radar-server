@@ -2,7 +2,7 @@
 // for more of what you can do here.
 const Sequelize = require("sequelize");
 const DataTypes = Sequelize.DataTypes;
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 module.exports = function (app) {
   const sequelizeClient = app.get("sequelizeClient");
@@ -22,8 +22,8 @@ module.exports = function (app) {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      createdAt: { type: DataTypes.DATE, default: moment() },
-      updatedAt: { type: DataTypes.DATE, default: moment() },
+      createdAt: { type: DataTypes.DATE, default: dayjs() },
+      updatedAt: { type: DataTypes.DATE, default: dayjs() },
     },
     {
       hooks: {

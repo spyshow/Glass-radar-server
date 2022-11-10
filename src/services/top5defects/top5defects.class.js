@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-vars */
 
 const pool = require("./../../db");
-const moment = require("moment");
 
 exports.Top5Defects = class Top5Defects {
   constructor(options) {
@@ -24,7 +23,7 @@ exports.Top5Defects = class Top5Defects {
     let machineSensors = {};
     let allResults = {};
     let result = {};
-    
+
     const machines = await this.app.service("machines").find({
       query: {
         lineId: id,
@@ -111,7 +110,7 @@ exports.Top5Defects = class Top5Defects {
       };
       data[index] = { ...temp };
     });
-    
+
     return {
       data,
       code: "200",

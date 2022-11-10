@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 const pool = require("./../../db");
-var moment = require("moment");
+const dayjs = require('dayjs');
 const { separateObject } = require("../../utils/separateObject");
 const { removeA } = require("../../utils/removeA");
 const { round } = require("./../../utils/round");
@@ -77,7 +77,7 @@ const mmmData = async function (params) {
       ],
       formatter:
         "{name} (" +
-        moment(params.query.newStartDate).from(params.query.oldStartDate) +
+        dayjs(params.query.newStartDate).from(params.query.oldStartDate) +
         ")",
     },
     grid: [

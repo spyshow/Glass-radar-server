@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 const { Service } = require("feathers-sequelize");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 exports.Linespeed = class Linespeed extends Service {
   setup(app) {
@@ -42,7 +42,7 @@ exports.Linespeed = class Linespeed extends Service {
           .service("linespeed")
           .remove(null, {
             query: {
-              createdAt: { $lte: moment().subtract(2, "hours").format() },
+              createdAt: { $lte: dayjs().subtract(2, "hours").format() },
             },
             multi: true,
           })

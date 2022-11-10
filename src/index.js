@@ -4,8 +4,10 @@ const app = require("./app");
 const port = app.get("port");
 const server = app.listen(port);
 const init = app.service("init");
-const CronJobManager = require("cron-job-manager");
-const manager = new CronJobManager();
+//const CronJobManager = require("cron-job-manager");
+//const manager = new CronJobManager();
+const Bree = require("bree");
+
 const pool = require("./db");
 
 process.on("unhandledRejection", (reason, p) =>
@@ -26,19 +28,31 @@ server.on("listening", async () => {
     })
     .catch((err) => console.log(err));
   //start gathering lines speed to linespeed table
-  if (!manager.exists("linespeed")) {
-    manager.add(
-      //we add a corn job
-      "linespeed",
-      "* * * * *",
-      () => {
-        app.service("linespeed").find();
-      },
+  // if (!manager.exists("linespeed")) {
+  //   manager.add(
+  //     //we add a corn job
+  //     "linespeed",
+  //     "* * * * *",
+  //     () => {
+  //       app.service("linespeed").find();
+  //     },
+  //     {
+  //       start: true,
+  //     }
+  //   );
+  // }
+  const bree = new Bree({
+    jobs: [
       {
-        start: true,
-      }
-    );
-  }
+        name: "linespeed",
+        cron: "* * * * *",
+      },
+    ],
+  });
+
+  (async () => {
+    await bree.start("linespeed");
+  })();
   //run init service once server start
   let defaultUser = {
     email: "admin@glassradar.com",

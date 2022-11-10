@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 const pool = require("./../../db");
-var moment = require("moment");
+const dayjs = require('dayjs');
 const { round } = require("./../../utils/round");
 
 exports.MachineCard = class MachineCard {
@@ -91,7 +91,7 @@ exports.MachineCard = class MachineCard {
         to_timestamp(floor((extract('epoch' from created_at) / 3600 )) * 3600) 
          as interval_alias
         FROM public."${params.query.machine_name}_${params.query.line_number}" 
-        where created_at > '${moment().subtract(6, "hours").format()}'
+        where created_at > '${dayjs().subtract(6, "hours").format()}'
         GROUP BY interval_alias
         order by interval_alias`
       )
@@ -150,7 +150,7 @@ exports.MachineCard = class MachineCard {
             let percent = round(100 - (row.rejected * 100) / row.inspected, 2);
             lineOption.data.push(percent);
             minRange > percent ? null : (minRange = percent);
-            xAxis.push(moment(row.interval_alias).hour());
+            xAxis.push(dayjs(row.interval_alias).hour());
           });
           if (minRange - 20 < 0) {
             minRange = 0;
@@ -159,7 +159,7 @@ exports.MachineCard = class MachineCard {
             res.rows.unshift({
               rejected: 0,
               inspected: 0,
-              interval_alias: moment(res.rows[0].interval_alias)
+              interval_alias: dayjs(res.rows[0].interval_alias)
                 .subtract(1, "hours")
                 .format(),
             });
